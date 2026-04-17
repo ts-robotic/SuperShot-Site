@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperShot — Professional Screenshot & Annotation Tool</title>
+  <meta name="description" content="SuperShot by TS Robotics. Capture, annotate, and share screenshots instantly. Available for Windows and macOS.">
+  <link rel="icon" href="icon-128.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue-900: #0A1A3A;
+      --blue-800: #0D2B6B;
+      --blue-700: #0D47A1;
+      --blue-600: #1565C0;
+      --blue-500: #007AFF;
+      --blue-400: #42A5F5;
+      --blue-300: #90CAF9;
+      --blue-200: #BBDEFB;
+      --blue-100: #E3F2FD;
+      --cyan: #00E5FF;
+      --white: #FFFFFF;
+      --gray-100: #F5F7FA;
+      --gray-200: #E8ECF1;
+      --gray-300: #CBD2DC;
+      --gray-500: #6B7A90;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --glow: 0 0 60px rgba(0, 122, 255, 0.3);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--gray-900);
+      color: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════════════════════════════════════
+       ANIMATED BACKGROUND
+       ═══════════════════════════════════════ */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(0,122,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,122,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    .bg-glow-1, .bg-glow-2, .bg-glow-3 {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-glow-1 {
+      width: 600px; height: 600px;
+      background: rgba(0, 122, 255, 0.15);
+      top: -200px; left: -100px;
+      animation: float1 15s ease-in-out infinite;
+    }
+
+    .bg-glow-2 {
+      width: 500px; height: 500px;
+      background: rgba(0, 229, 255, 0.08);
+      top: 50%; right: -150px;
+      animation: float2 18s ease-in-out infinite;
+    }
+
+    .bg-glow-3 {
+      width: 400px; height: 400px;
+      background: rgba(99, 51, 204, 0.1);
+      bottom: -100px; left: 30%;
+      animation: float3 12s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(100px, 80px) scale(1.1); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-80px, -60px) scale(1.15); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(60px, -40px) scale(1.05); }
+    }
+
+    /* ═══════════════════════════════════════
+       LAYOUT
+       ═══════════════════════════════════════ */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    section {
+      padding: 100px 0;
+    }
+
+    /* ═══════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      transition: all 0.3s ease;
+    }
+
+    nav.scrolled {
+      background: rgba(10, 26, 58, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 122, 255, 0.1);
+      padding: 10px 0;
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .nav-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    .nav-logo span {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray-300);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--blue-500);
+      color: var(--white) !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-weight: 600 !important;
+      transition: all 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--blue-400);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 122, 255, 0.4);
+    }
+
+    /* ═══════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      text-align: center;
+    }
+
+    .hero .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(0, 122, 255, 0.1);
+      border: 1px solid rgba(0, 122, 255, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--blue-300);
+      margin-bottom: 32px;
+      animation: fadeInDown 0.8s ease;
+    }
+
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+
+    .hero-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 28px;
+      margin-bottom: 40px;
+      box-shadow: var(--glow), 0 20px 60px rgba(0,0,0,0.5);
+      animation: heroIconFloat 4s ease-in-out infinite, fadeInUp 1s ease;
+    }
+
+    @keyframes heroIconFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .hero h1 {
+      font-size: clamp(48px, 7vw, 80px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--blue-400), var(--cyan), var(--blue-300));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: clamp(18px, 2.5vw, 22px);
+      color: var(--gray-300);
+      max-width: 640px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+      animation: fadeInUp 1s ease 0.4s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeInUp 1s ease 0.6s both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(0, 122, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 40px rgba(0, 122, 255, 0.5);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--white);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 64px;
+      animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .hero-stats .stat {
+      text-align: center;
+    }
+
+    .hero-stats .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--blue-400);
+    }
+
+    .hero-stats .stat-label {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════
+       DEMO / SCREENSHOT SHOWCASE
+       ═══════════════════════════════════════ */
+    .showcase {
+      padding: 40px 0 100px;
+    }
+
+    .showcase-window {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--blue-900);
+      border: 1px solid rgba(0, 122, 255, 0.15);
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5), var(--glow);
+      animation: fadeInUp 1s ease;
+    }
+
+    .showcase-titlebar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .showcase-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+    }
+
+    .showcase-dot:nth-child(1) { background: #FF5F57; }
+    .showcase-dot:nth-child(2) { background: #FFBD2E; }
+    .showcase-dot:nth-child(3) { background: #28CA41; }
+
+    .showcase-content {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+
+    /* Animated demo capture UI */
+    .demo-screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .demo-region {
+      width: 60%;
+      height: 55%;
+      border: 2px dashed var(--blue-400);
+      border-radius: 4px;
+      position: relative;
+      animation: regionPulse 3s ease-in-out infinite;
+      background: rgba(0, 122, 255, 0.05);
+    }
+
+    @keyframes regionPulse {
+      0%, 100% { border-color: var(--blue-400); box-shadow: 0 0 0 0 rgba(0,122,255,0); }
+      50% { border-color: var(--cyan); box-shadow: 0 0 20px 4px rgba(0,122,255,0.15); }
+    }
+
+    .demo-corner {
+      position: absolute;
+      width: 16px; height: 16px;
+      border: 3px solid var(--white);
+    }
+
+    .demo-corner.tl { top: -3px; left: -3px; border-right: none; border-bottom: none; }
+    .demo-corner.tr { top: -3px; right: -3px; border-left: none; border-bottom: none; }
+    .demo-corner.bl { bottom: -3px; left: -3px; border-right: none; border-top: none; }
+    .demo-corner.br { bottom: -3px; right: -3px; border-left: none; border-top: none; }
+
+    .demo-dimensions {
+      position: absolute;
+      bottom: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: var(--white);
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      white-space: nowrap;
+    }
+
+    .demo-crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+    }
+
+    .demo-crosshair::before, .demo-crosshair::after {
+      content: '';
+      position: absolute;
+      background: var(--cyan);
+    }
+
+    .demo-crosshair::before {
+      width: 2px; height: 100%;
+      left: 50%; transform: translateX(-50%);
+    }
+
+    .demo-crosshair::after {
+      height: 2px; width: 100%;
+      top: 50%; transform: translateY(-50%);
+    }
+
+    .demo-toolbar {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 2px;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 10px;
+      padding: 6px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .demo-tool {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .demo-tool.active {
+      background: var(--blue-500);
+    }
+
+    .demo-tool svg {
+      width: 18px; height: 18px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Animated annotation line */
+    .demo-annotation {
+      position: absolute;
+      top: 25%;
+      left: 22%;
+    }
+
+    .demo-arrow {
+      width: 200px;
+      height: 2px;
+      background: #FF0000;
+      transform: rotate(-15deg);
+      transform-origin: left center;
+      animation: drawArrow 3s ease-in-out infinite;
+    }
+
+    @keyframes drawArrow {
+      0% { width: 0; opacity: 0; }
+      20% { opacity: 1; }
+      50% { width: 200px; opacity: 1; }
+      80% { opacity: 1; }
+      100% { width: 200px; opacity: 0; }
+    }
+
+    /* ═══════════════════════════════════════
+       FEATURES
+       ═══════════════════════════════════════ */
+    .features-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--blue-400);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--gray-500);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius);
+      padding: 36px 28px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--blue-500), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(0, 122, 255, 0.2);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, rgba(0,122,255,0.15), rgba(0,229,255,0.1));
+    }
+
+    .feature-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--blue-400);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       HOW IT WORKS (3 Steps)
+       ═══════════════════════════════════════ */
+    .steps {
+      background: rgba(0, 122, 255, 0.03);
+      border-top: 1px solid rgba(0, 122, 255, 0.06);
+      border-bottom: 1px solid rgba(0, 122, 255, 0.06);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+      margin-top: 64px;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-number {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-700), var(--blue-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 30px rgba(0, 122, 255, 0.3);
+    }
+
+    .step h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .step p {
+      font-size: 15px;
+      color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* Connector lines between steps */
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 32px;
+      right: -24px;
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--blue-500), transparent);
+    }
+
+    /* ═══════════════════════════════════════
+       KEYBOARD SHORTCUTS
+       ═══════════════════════════════════════ */
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      max-width: 700px;
+      margin: 64px auto 0;
+    }
+
+    .shortcut {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      transition: all 0.3s;
+    }
+
+    .shortcut:hover {
+      background: rgba(0, 122, 255, 0.06);
+      border-color: rgba(0, 122, 255, 0.15);
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      min-width: 100px;
+    }
+
+    .kbd-key {
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: var(--blue-300);
+    }
+
+    .shortcut-label {
+      font-size: 14px;
+      color: var(--gray-300);
+    }
+
+    /* ═══════════════════════════════════════
+       DOWNLOAD SECTION
+       ═══════════════════════════════════════ */
+    .download {
+      text-align: center;
+    }
+
+    .download-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 700px;
+      margin: 64px auto 0;
+    }
+
+    .download-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.4s;
+      position: relative;
+    }
+
+    .download-card:hover {
+      border-color: var(--blue-500);
+      background: rgba(0, 122, 255, 0.05);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 122, 255, 0.1);
+    }
+
+    .download-card .os-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 20px;
+      opacity: 0.9;
+    }
+
+    .download-card .os-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .download-card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .download-card .version {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-bottom: 6px;
+    }
+
+    .download-card .size {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+
+    .download-card .signed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(40, 202, 65, 0.1);
+      border: 1px solid rgba(40, 202, 65, 0.2);
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #28CA41;
+      margin-bottom: 20px;
+    }
+
+    .download-card .btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ═══════════════════════════════════════
+       TRUST / COMPANY SECTION
+       ═══════════════════════════════════════ */
+    .trust {
+      text-align: center;
+      padding: 80px 0;
+    }
+
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-top: 48px;
+    }
+
+    .trust-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .trust-badge .badge-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(0, 122, 255, 0.08);
+      border: 1px solid rgba(0, 122, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trust-badge .badge-icon svg {
+      width: 24px; height: 24px;
+      stroke: var(--blue-400);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .trust-badge span {
+      font-size: 13px;
+      color: var(--gray-500);
+      max-width: 120px;
+      line-height: 1.4;
+    }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 48px 0;
+      text-align: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo img {
+      width: 28px; height: 28px;
+      border-radius: 6px;
+    }
+
+    .footer-logo span {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.8;
+    }
+
+    .footer-text a {
+      color: var(--blue-400);
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* ═══════════════════════════════════════
+       ANIMATIONS (scroll reveal)
+       ═══════════════════════════════════════ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+    .reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.1s; }
+    .reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.2s; }
+    .reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.3s; }
+    .reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.4s; }
+    .reveal-stagger > .reveal:nth-child(6) { transition-delay: 0.5s; }
+    .reveal-stagger > .reveal:nth-child(7) { transition-delay: 0.6s; }
+    .reveal-stagger > .reveal:nth-child(8) { transition-delay: 0.7s; }
+    .reveal-stagger > .reveal:nth-child(9) { transition-delay: 0.8s; }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: 1fr; gap: 32px; }
+      .step:not(:last-child)::after { display: none; }
+      .download-cards { grid-template-columns: 1fr; }
+      .shortcuts-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 24px; }
+      .nav-links { display: none; }
+      .trust-badges { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="bg-glow-3"></div>
+
+  <!-- ═══ NAVIGATION ═══ -->
+  <nav id="nav">
+    <div class="container">
+      <a href="#" class="nav-logo">
+        <img src="icon-128.png" alt="SuperShot">
+        <span>SuperShot</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#shortcuts">Shortcuts</a></li>
+        <li><a href="#download" class="nav-cta">Download Free</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Version 1.0.0 — Now Available
+      </div>
+
+      <img src="icon.png" alt="SuperShot Icon" class="hero-icon">
+
+      <h1>
+        Capture. Annotate.<br>
+        <span class="gradient-text">Share Instantly.</span>
+      </h1>
+
+      <p>
+        The professional screenshot tool that gets out of your way.
+        One hotkey, pixel-perfect capture, powerful annotation &mdash; all in under a second.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#download" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Now
+        </a>
+        <a href="#features" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          See Features
+        </a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">< 1s</div>
+          <div class="stat-label">Capture Speed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Annotation Tools</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">2</div>
+          <div class="stat-label">Platforms</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Subscriptions</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SHOWCASE ═══ -->
+  <section class="showcase">
+    <div class="container">
+      <div class="showcase-window reveal">
+        <div class="showcase-titlebar">
+          <div class="showcase-dot"></div>
+          <div class="showcase-dot"></div>
+          <div class="showcase-dot"></div>
+        </div>
+        <div class="showcase-content">
+          <div class="demo-screen">
+            <div class="demo-region">
+              <div class="demo-corner tl"></div>
+              <div class="demo-corner tr"></div>
+              <div class="demo-corner bl"></div>
+              <div class="demo-corner br"></div>
+              <div class="demo-crosshair"></div>
+              <div class="demo-dimensions">1280 x 720</div>
+            </div>
+            <div class="demo-annotation">
+              <div class="demo-arrow"></div>
+            </div>
+          </div>
+          <div class="demo-toolbar">
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+            </div>
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </div>
+            <div class="demo-tool active">
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+            </div>
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+            </div>
+            <div style="width:1px; background:rgba(255,255,255,0.1); margin:4px 2px;"></div>
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            </div>
+            <div class="demo-tool">
+              <svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FEATURES ═══ -->
+  <section id="features">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Everything you need.<br>Nothing you don't.</h2>
+        <p class="section-subtitle">Built for speed and precision. No bloat, no cloud accounts, no subscriptions.</p>
+      </div>
+
+      <div class="features-grid reveal-stagger">
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <h3>Instant Region Capture</h3>
+          <p>One hotkey triggers a pixel-perfect region selector with crosshair cursor and live dimension labels. Select exactly what you need.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/></svg>
+          </div>
+          <h3>Annotation Toolkit</h3>
+          <p>Pencil, Line, Arrow, Rectangle, and Text tools with 12 colour presets and adjustable line widths. Mark up screenshots in seconds.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          </div>
+          <h3>Copy, Save & Share</h3>
+          <p>Copy to clipboard with one click, save to disk as PNG or JPEG, print directly, or pin screenshots on top of other windows.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h3>Multi-Display Support</h3>
+          <p>Automatically detects which display your cursor is on and captures at native resolution. Full DPI scaling support for HiDPI screens.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+          </div>
+          <h3>Customisable Hotkeys</h3>
+          <p>Remap every shortcut to your preference. Region capture, fullscreen, delayed capture, GIF recording &mdash; each with its own hotkey.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3>Privacy First</h3>
+          <p>No cloud, no accounts, no telemetry. Your screenshots stay on your machine. EV code-signed by Mortgage Magick Ltd for verified trust.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3>Clipboard History</h3>
+          <p>Keeps your last 20 captures in memory for quick access from the system tray. Never lose a screenshot again.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <h3>Delayed Capture</h3>
+          <p>Set a 3, 5, or 10 second timer before capture. Perfect for capturing menus, tooltips, and hover states that disappear on click.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          </div>
+          <h3>Pin to Screen</h3>
+          <p>Pin any capture as a floating always-on-top window. Resize, adjust opacity, and keep reference images visible while you work.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section id="how-it-works" class="steps">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">How It Works</div>
+        <h2 class="section-title">Three steps. Under a second.</h2>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step reveal">
+          <div class="step-number">1</div>
+          <h3>Press the Hotkey</h3>
+          <p>Hit <strong>Ctrl+1</strong> (Windows) or <strong>Cmd+1</strong> (Mac). The screen freezes and a crosshair appears instantly.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-number">2</div>
+          <h3>Select & Annotate</h3>
+          <p>Click and drag to select your region. Annotation tools appear automatically &mdash; draw arrows, add text, highlight areas.</p>
+        </div>
+        <div class="step reveal">
+          <div class="step-number">3</div>
+          <h3>Copy or Save</h3>
+          <p>One click to copy to clipboard, save to disk, print, or pin on screen. Your screenshot is ready to share.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SHORTCUTS ═══ -->
+  <section id="shortcuts">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Keyboard Shortcuts</div>
+        <h2 class="section-title">Speed is everything.</h2>
+        <p class="section-subtitle">Every action has a shortcut. Your hands never leave the keyboard.</p>
+      </div>
+
+      <div class="shortcuts-grid reveal-stagger">
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Ctrl</span>
+            <span class="kbd-key">1</span>
+          </div>
+          <span class="shortcut-label">Region Capture</span>
+        </div>
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Ctrl</span>
+            <span class="kbd-key">Shift</span>
+            <span class="kbd-key">3</span>
+          </div>
+          <span class="shortcut-label">Fullscreen Capture</span>
+        </div>
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Ctrl</span>
+            <span class="kbd-key">2</span>
+          </div>
+          <span class="shortcut-label">Delayed Capture</span>
+        </div>
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Ctrl</span>
+            <span class="kbd-key">3</span>
+          </div>
+          <span class="shortcut-label">Record GIF</span>
+        </div>
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Ctrl</span>
+            <span class="kbd-key">Z</span>
+          </div>
+          <span class="shortcut-label">Undo Annotation</span>
+        </div>
+        <div class="shortcut reveal">
+          <div class="kbd">
+            <span class="kbd-key">Esc</span>
+          </div>
+          <span class="shortcut-label">Cancel / Close</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ DOWNLOAD ═══ -->
+  <section id="download" class="download">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Download</div>
+        <h2 class="section-title">Get SuperShot. Free.</h2>
+        <p class="section-subtitle">No trial, no watermarks, no subscriptions. Just install and capture.</p>
+      </div>
+
+      <div class="download-cards reveal-stagger">
+        <!-- Windows -->
+        <div class="download-card reveal">
+          <div class="os-icon">
+            <svg viewBox="0 0 24 24" fill="var(--blue-400)">
+              <path d="M3 12V6.75l7-1.25V12H3zm8-1.5V4.5L21 3v9h-10zm-8 3h7v6.5L3 18.75V13.5zm8 0h10v9l-10-1.5V13.5z"/>
+            </svg>
+          </div>
+          <h3>Windows</h3>
+          <div class="version">v1.0.0 &middot; Windows 10+</div>
+          <div class="size">114 MB &middot; x64 NSIS Installer</div>
+          <div class="signed-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            EV Code Signed
+          </div>
+          <a href="https://github.com/tanjirsugar/supershot-windows/releases/download/v1.0.0/SuperShot.Setup.1.0.0.exe" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download for Windows
+          </a>
+        </div>
+
+        <!-- macOS -->
+        <div class="download-card reveal">
+          <div class="os-icon">
+            <svg viewBox="0 0 24 24" fill="var(--blue-400)">
+              <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+            </svg>
+          </div>
+          <h3>macOS</h3>
+          <div class="version">v1.0.0 &middot; macOS 12+</div>
+          <div class="size">135 MB &middot; Apple Silicon DMG</div>
+          <div class="signed-badge" style="background:rgba(255,189,46,0.1); border-color:rgba(255,189,46,0.2); color:#FFBD2E;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Hardened Runtime
+          </div>
+          <a href="https://github.com/tanjirsugar/supershot-mac/releases/download/v1.0.0/SuperShot-1.0.0-arm64.dmg" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download for macOS
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TRUST ═══ -->
+  <section class="trust">
+    <div class="container reveal">
+      <div class="section-label">Trusted & Verified</div>
+      <h2 class="section-title">Built with integrity.</h2>
+
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <div class="badge-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <span>EV Code Signed Certificate</span>
+        </div>
+        <div class="trust-badge">
+          <div class="badge-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10" stroke="var(--cyan)" stroke-width="2"/></svg>
+          </div>
+          <span>Windows SmartScreen Trusted</span>
+        </div>
+        <div class="trust-badge">
+          <div class="badge-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <span>No Cloud. No Telemetry.</span>
+        </div>
+        <div class="trust-badge">
+          <div class="badge-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <span>Developed by TS Robotics</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">
+        <img src="icon-128.png" alt="SuperShot">
+        <span>SuperShot</span>
+      </div>
+      <div class="footer-text">
+        Developed by <strong>TS Robotics</strong>. Solely licensed to <strong>Mortgage Magick Limited</strong>,
+        trading as <strong>Mortgage Magic</strong>, for distribution.<br>
+        Copyright &copy; 2026 Mortgage Magick Limited. All rights reserved.<br><br>
+        <a href="https://github.com/tanjirsugar/supershot-windows/releases">Windows Releases</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://github.com/tanjirsugar/supershot-mac/releases">macOS Releases</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <script>
+    // Sticky nav background
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    revealElements.forEach(el => observer.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Parallax on mouse move for hero icon
+    const heroIcon = document.querySelector('.hero-icon');
+    document.addEventListener('mousemove', e => {
+      if (!heroIcon) return;
+      const x = (e.clientX / window.innerWidth - 0.5) * 20;
+      const y = (e.clientY / window.innerHeight - 0.5) * 20;
+      heroIcon.style.transform = `translateY(${Math.sin(Date.now() / 500) * 6}px) translate(${x}px, ${y}px)`;
+    });
+  </script>
+</body>
+</html>
