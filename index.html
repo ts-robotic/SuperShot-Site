@@ -997,7 +997,7 @@
     <div class="container">
       <div class="hero-badge">
         <span class="dot"></span>
-        Version 1.0.0 — Now Available
+        Version 1.1.0 — Now Available
       </div>
 
       <img src="icon.png" alt="SuperShot Icon" class="hero-icon">
@@ -1265,6 +1265,69 @@
     </div>
   </section>
 
+  <!-- ═══ WHAT'S NEW ═══ -->
+  <section id="whats-new" style="padding:96px 0; background:linear-gradient(180deg, rgba(0,122,255,0.04), transparent);">
+    <div class="container">
+      <div class="features-header reveal">
+        <div class="section-label">Release Notes</div>
+        <h2 class="section-title">What&rsquo;s new in v1.1</h2>
+        <p class="section-subtitle">Released 17 April 2026 &middot; Signed, notarized, and ready to install.</p>
+      </div>
+
+      <div style="max-width:880px; margin:0 auto; display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;" class="reveal-stagger">
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(255,59,48,0.18), rgba(255,149,0,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="#FF3B30"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">GIF Recording</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Select any region, record up to 30 seconds at 10&nbsp;fps, and save an optimised GIF &mdash; all from the tray.</p>
+        </div>
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(52,199,89,0.18), rgba(0,199,190,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 6 12 14 20 6"/><polyline points="4 14 12 22 20 14"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Scrolling Capture</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Capture long pages or documents frame by frame. SuperShot stitches them into a single tall screenshot.</p>
+        </div>
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(0,122,255,0.18), rgba(0,229,255,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Better Text Annotation</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Multi-line text with drag-to-reposition, five font sizes, and keyboard shortcuts. Enter commits, Shift+Enter newlines.</p>
+        </div>
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(175,82,222,0.18), rgba(88,86,214,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#AF52DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h2M6 12h8M6 16h6"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Proper Shortcuts</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Ctrl/Cmd+C now copies the annotated capture, Ctrl/Cmd+S saves, Ctrl/Cmd+Z undoes. Ctrl+1 remains the global capture hotkey.</p>
+        </div>
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(255,204,0,0.18), rgba(255,149,0,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Trust &amp; Security</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">macOS build now notarized by Apple. Windows build passes Defender cleanly &mdash; the heuristic-triggering window detector was removed.</p>
+        </div>
+
+        <div class="feature-card reveal" style="padding:28px;">
+          <div class="feature-icon" style="background:linear-gradient(135deg, rgba(0,229,255,0.18), rgba(0,122,255,0.1));">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan, #00E5FF)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          </div>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Smaller, Faster</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Dead-code cleanup shrank installers by &sim;24% (135&nbsp;MB &rarr; 112&nbsp;MB on macOS; 114&nbsp;MB &rarr; 96&nbsp;MB on Windows).</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ═══ DOWNLOAD ═══ -->
   <section id="download" class="download">
     <div class="container">
@@ -1283,13 +1346,13 @@
             </svg>
           </div>
           <h3>Windows</h3>
-          <div class="version">v1.0.0 &middot; Windows 10+</div>
-          <div class="size">114 MB &middot; x64 NSIS Installer</div>
+          <div class="version">v1.1.0 &middot; Windows 10+</div>
+          <div class="size">96 MB &middot; x64 NSIS Installer</div>
           <div class="signed-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             EV Code Signed
           </div>
-          <a href="https://github.com/tanjirsugar/supershot-windows/releases/download/v1.0.0/SuperShot.Setup.1.0.0.exe" class="btn btn-primary">
+          <a href="https://github.com/ts-robotic/supershot-windows/releases/download/v1.1.0/SuperShot-Setup-1.1.0.exe" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download for Windows
           </a>
@@ -1303,13 +1366,13 @@
             </svg>
           </div>
           <h3>macOS</h3>
-          <div class="version">v1.0.0 &middot; macOS 12+</div>
-          <div class="size">135 MB &middot; Apple Silicon DMG</div>
-          <div class="signed-badge" style="background:rgba(255,189,46,0.1); border-color:rgba(255,189,46,0.2); color:#FFBD2E;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Hardened Runtime
+          <div class="version">v1.1.0 &middot; macOS 12+</div>
+          <div class="size">112 MB &middot; Apple Silicon DMG</div>
+          <div class="signed-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Notarized by Apple
           </div>
-          <a href="https://github.com/tanjirsugar/supershot-mac/releases/download/v1.0.0/SuperShot-1.0.0-arm64.dmg" class="btn btn-primary">
+          <a href="https://github.com/ts-robotic/supershot-mac/releases/download/v1.1.0/SuperShot-1.1.0-arm64.dmg" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download for macOS
           </a>
@@ -1364,9 +1427,9 @@
         Developed by <strong>TS Robotics</strong>. Solely licensed to <strong>Mortgage Magick Limited</strong>,
         trading as <strong>Mortgage Magic</strong>, for distribution.<br>
         Copyright &copy; 2026 Mortgage Magick Limited. All rights reserved.<br><br>
-        <a href="https://github.com/tanjirsugar/supershot-windows/releases">Windows Releases</a>
+        <a href="https://github.com/ts-robotic/supershot-windows/releases">Windows Releases</a>
         &nbsp;&middot;&nbsp;
-        <a href="https://github.com/tanjirsugar/supershot-mac/releases">macOS Releases</a>
+        <a href="https://github.com/ts-robotic/supershot-mac/releases">macOS Releases</a>
       </div>
     </div>
   </footer>
