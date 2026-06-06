@@ -1,0 +1,98 @@
+# Secret-scan gate config for the Ever North estate.
+#
+# Extends the gitleaks default ruleset (broad upstream coverage) and adds
+# rules tuned to the secret shapes seen across this estate.
+#
+# Allowlisting policy:
+#   - This config defines NO allowlist of its own. No live-credential
+#     pattern is suppressed here.
+#   - useDefault = true inherits gitleaks' upstream allowlists, which target
+#     documented example values and stopwords (not live credentials). The
+#     estate rules below carry no allowlist, so an estate finding is never
+#     suppressed by an upstream example list.
+#   - Secret values are redacted in CI output by the --redact flag in the
+#     workflow. Values are never printed.
+#
+# Known, intentional scope boundaries (documented, not defects):
+#   - The estate JWT rule targets signed 3-segment tokens. Unsigned
+#     2-segment (alg:none) tokens are still caught by the upstream default
+#     jwt rule (optional 3rd segment), retained via useDefault.
+#   - The canonical AWS doc example AKIAIOSFODNN7EXAMPLE is NOT allowlisted;
+#     fail-closed means even the example key fails the gate.
+#   - Only enumerated DB/SQL schemes match. http(s)/smtp basic-auth creds
+#     are out of scope per the SQL/DB requirement.
+#   - Stripe sk_live_/rk_live_ underscore keys are matched by the estate rule
+#     below AND by upstream stripe rules; OpenAI/Anthropic hyphen keys by the
+#     estate rule. Keep useDefault = true to retain the upstream backstop.
+
+title = "Ever North estate secret-scan gate"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "estate-aws-access-key-id"
+description = "AWS access key id (AKIA/ASIA)"
+regex = '''\b(?:AKIA|ASIA)[0-9A-Z]{16}\b'''
+keywords = ["AKIA", "ASIA"]
+
+[[rules]]
+id = "estate-jwt"
+description = "JSON Web Token (signed, 3-segment)"
+regex = '''\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b'''
+keywords = ["eyJ"]
+
+# sk-/rk- secret keys. Anchored on real key families so benign hyphenated
+# identifiers (CSS classes, slugs, package names) do not match:
+#   - sk-proj-/sk-ant-/sk-or-v1- prefixes (OpenAI project, Anthropic, OpenRouter)
+#   - bare sk- followed by 40+ contiguous alphanumerics (classic OpenAI)
+#   - sk_live_/sk_test_/rk_live_/rk_test_ (Stripe)
+[[rules]]
+id = "estate-sk-secret-key"
+description = "Secret key with sk-/rk- prefix (OpenAI / Anthropic / OpenRouter / Stripe)"
+regex = '''\b(?:sk-(?:proj|ant|or-v1)-[A-Za-z0-9_-]{20,}|sk-[A-Za-z0-9]{40,}|(?:sk|rk)_(?:live|test)_[A-Za-z0-9]{16,})'''
+keywords = ["sk-", "sk_", "rk_"]
+
+# DB connection URI with embedded credentials. The username is optional so
+# userless forms (redis://:pass@host, amqp://:pass@host) are caught. The
+# password's first character may not be a template sigil ($ % { <) so
+# ${VAR}/{{var}}/<pass>/%PASS% templates in compose/.env.example/Helm do not match.
+[[rules]]
+id = "estate-db-connection-uri"
+description = "Database connection URI with embedded credentials"
+regex = '''\b(?:postgres|postgresql|mysql|mariadb|mongodb(?:\+srv)?|sqlserver|redis|rediss|amqp|amqps|jdbc:[a-z0-9]+)://[^\s:@/]*:[^\s:@/$%{<][^\s:@/]*@[^\s/]+'''
+keywords = ["postgres", "postgresql", "mysql", "mariadb", "mongodb", "sqlserver", "redis", "amqp", "jdbc:"]
+
+# ADO.NET / ODBC connection string with a password. Matches either key order
+# (Server=...;Password=... or Password=...;Server=...) on one line, with no
+# fixed distance between keys. Template-sigil passwords are excluded.
+[[rules]]
+id = "estate-ado-net-connection-string"
+description = "ADO.NET / ODBC SQL connection string with password"
+regex = '''(?i)(?:(?:server|data source)=[^\n]*?(?:password|pwd)=[^;'"\s\n$%{<][^;'"\s\n]*|(?:password|pwd)=[^;'"\s\n$%{<][^;'"\s\n]*[^\n]*?(?:server|data source)=[^;\n]+)'''
+keywords = ["password=", "pwd="]
+
+[[rules]]
+id = "estate-private-key-pem"
+description = "PEM private key block"
+regex = '''-----BEGIN (?:RSA |EC |DSA |OPENSSH |PGP |ENCRYPTED )?PRIVATE KEY-----'''
+keywords = ["PRIVATE KEY"]
+
+# The actual secret in a Google service-account JSON is the private_key field.
+# The "type":"service_account" marker alone is not a secret (it appears in
+# schemas, docs and Terraform) so it is intentionally not matched.
+[[rules]]
+id = "estate-gcp-private-key-field"
+description = "Google service-account private_key field"
+regex = '''"private_key"\s*:\s*"-----BEGIN (?:RSA )?PRIVATE KEY-----'''
+keywords = ["private_key"]
+
+[[rules]]
+id = "estate-apple-p8-key-file"
+description = "Apple / PKCS#8 .p8 key file (by path)"
+path = '''(?i)\.p8$'''
+
+[[rules]]
+id = "estate-pkcs12-keystore-file"
+description = "PKCS#12 keystore .pfx / .p12 file (by path, text blobs only)"
+path = '''(?i)\.(?:pfx|p12)$'''
