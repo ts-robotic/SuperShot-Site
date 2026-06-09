@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperShot — Professional Screenshot & Annotation Tool</title>
-  <meta name="description" content="SuperShot by TS Robotics. Capture, annotate, and share screenshots instantly. Available for Windows and macOS.">
+  <title>SuperShot — Screenshots & Screen Recording in One App</title>
+  <meta name="description" content="SuperShot by TS Robotics. Pixel-perfect screenshots with powerful annotation, plus built-in screen recording to MP4. One app, one hotkey. Windows now; macOS and iOS coming soon.">
   <link rel="icon" href="icon-128.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -754,10 +754,19 @@
 
     .download-cards {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      max-width: 700px;
+      max-width: 980px;
       margin: 64px auto 0;
+    }
+
+    .download-card.soon { opacity: 0.85; }
+    .download-card.soon .btn { background: rgba(255,255,255,0.06); color: var(--gray-300); cursor: default; pointer-events: none; }
+    .download-card .coming-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; background: rgba(0,122,255,0.1);
+      border: 1px solid rgba(0,122,255,0.2); border-radius: 100px;
+      font-size: 11px; font-weight: 600; color: var(--blue-300); margin-bottom: 20px;
     }
 
     .download-card {
@@ -997,19 +1006,19 @@
     <div class="container">
       <div class="hero-badge">
         <span class="dot"></span>
-        Version 1.1.0 — Now Available
+        Version 2.0 — Now with Screen Recording
       </div>
 
       <img src="icon.png" alt="SuperShot Icon" class="hero-icon">
 
       <h1>
         Capture. Annotate.<br>
-        <span class="gradient-text">Share Instantly.</span>
+        <span class="gradient-text">Record. Share.</span>
       </h1>
 
       <p>
-        The professional screenshot tool that gets out of your way.
-        One hotkey, pixel-perfect capture, powerful annotation &mdash; all in under a second.
+        SuperShot now does it all &mdash; pixel-perfect screenshots with powerful annotation,
+        <strong>plus built-in screen recording to MP4</strong>. One app, one hotkey, no subscriptions.
       </p>
 
       <div class="hero-buttons">
@@ -1025,16 +1034,16 @@
 
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-value">< 1s</div>
+          <div class="stat-value">2-in-1</div>
+          <div class="stat-label">Capture + Record</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">MP4</div>
+          <div class="stat-label">Screen Recording</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value">&lt; 1s</div>
           <div class="stat-label">Capture Speed</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">5</div>
-          <div class="stat-label">Annotation Tools</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value">2</div>
-          <div class="stat-label">Platforms</div>
         </div>
         <div class="stat">
           <div class="stat-value">0</div>
@@ -1108,6 +1117,14 @@
       <div class="features-grid reveal-stagger">
         <div class="feature-card reveal">
           <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          </div>
+          <h3>Built-in Screen Recording</h3>
+          <p>Drag a box over any region and record it straight to MP4 &mdash; with your microphone. A 3-2-1 countdown, live timer, and one-key stop. No screen-share prompts, no second app.</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <div class="feature-icon">
             <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
           </div>
           <h3>Instant Region Capture</h3>
@@ -1143,7 +1160,7 @@
             <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
           </div>
           <h3>Customisable Hotkeys</h3>
-          <p>Remap every shortcut to your preference. Region capture, fullscreen, delayed capture, GIF recording &mdash; each with its own hotkey.</p>
+          <p>Remap every shortcut to your preference. Region, full screen, scrolling and timed capture each have their own global hotkey.</p>
         </div>
 
         <div class="feature-card reveal">
@@ -1193,7 +1210,7 @@
         <div class="step reveal">
           <div class="step-number">1</div>
           <h3>Press the Hotkey</h3>
-          <p>Hit <strong>Ctrl+1</strong> (Windows) or <strong>Cmd+1</strong> (Mac). The screen freezes and a crosshair appears instantly.</p>
+          <p>Hit <strong>Ctrl+Shift+S</strong>, or open the recorder from the app. The screen freezes and a crosshair appears instantly.</p>
         </div>
         <div class="step reveal">
           <div class="step-number">2</div>
@@ -1220,46 +1237,28 @@
 
       <div class="shortcuts-grid reveal-stagger">
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Ctrl</span>
-            <span class="kbd-key">1</span>
-          </div>
+          <div class="kbd"><span class="kbd-key">Ctrl</span><span class="kbd-key">Shift</span><span class="kbd-key">S</span></div>
           <span class="shortcut-label">Region Capture</span>
         </div>
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Ctrl</span>
-            <span class="kbd-key">Shift</span>
-            <span class="kbd-key">3</span>
-          </div>
-          <span class="shortcut-label">Fullscreen Capture</span>
+          <div class="kbd"><span class="kbd-key">Ctrl</span><span class="kbd-key">Shift</span><span class="kbd-key">F</span></div>
+          <span class="shortcut-label">Full Screen Capture</span>
         </div>
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Ctrl</span>
-            <span class="kbd-key">2</span>
-          </div>
-          <span class="shortcut-label">Delayed Capture</span>
+          <div class="kbd"><span class="kbd-key">Ctrl</span><span class="kbd-key">Shift</span><span class="kbd-key">R</span></div>
+          <span class="shortcut-label">Scrolling Capture</span>
         </div>
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Ctrl</span>
-            <span class="kbd-key">3</span>
-          </div>
-          <span class="shortcut-label">Record GIF</span>
+          <div class="kbd"><span class="kbd-key">Ctrl</span><span class="kbd-key">Shift</span><span class="kbd-key">T</span></div>
+          <span class="shortcut-label">Timed Capture</span>
         </div>
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Ctrl</span>
-            <span class="kbd-key">Z</span>
-          </div>
-          <span class="shortcut-label">Undo Annotation</span>
+          <div class="kbd"><span class="kbd-key">Esc</span></div>
+          <span class="shortcut-label">Stop Recording / Cancel</span>
         </div>
         <div class="shortcut reveal">
-          <div class="kbd">
-            <span class="kbd-key">Esc</span>
-          </div>
-          <span class="shortcut-label">Cancel / Close</span>
+          <div class="kbd"><span class="kbd-key">F10</span></div>
+          <span class="shortcut-label">Discard Recording</span>
         </div>
       </div>
     </div>
@@ -1270,8 +1269,8 @@
     <div class="container">
       <div class="features-header reveal">
         <div class="section-label">Release Notes</div>
-        <h2 class="section-title">What&rsquo;s new in v1.1.3</h2>
-        <p class="section-subtitle">Released 1 May 2026 &middot; Signed, notarized, and ready to install.</p>
+        <h2 class="section-title">What&rsquo;s new in v2.0</h2>
+        <p class="section-subtitle">The biggest release yet &mdash; screenshots and screen recording, together in one app.</p>
       </div>
 
       <div style="max-width:880px; margin:0 auto; display:grid; grid-template-columns:repeat(2, 1fr); gap:20px;" class="reveal-stagger">
@@ -1280,8 +1279,8 @@
           <div class="feature-icon" style="background:linear-gradient(135deg, rgba(255,59,48,0.18), rgba(255,149,0,0.1));">
             <svg viewBox="0 0 24 24" fill="none" stroke="#FF3B30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="#FF3B30"/></svg>
           </div>
-          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">GIF Recording</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Select any region, record up to 30 seconds at 10&nbsp;fps, and save an optimised GIF &mdash; all from the tray.</p>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Screen Recording to MP4</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">The headline of v2: drag a box over any region and record it straight to MP4 with your microphone. Countdown, live timer, one-key stop &mdash; no screen-share prompts.</p>
         </div>
 
         <div class="feature-card reveal" style="padding:28px;">
@@ -1289,39 +1288,39 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 6 12 14 20 6"/><polyline points="4 14 12 22 20 14"/></svg>
           </div>
           <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Scrolling Capture</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Capture long pages or documents frame by frame. SuperShot stitches them into a single tall screenshot.</p>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Capture long pages frame by frame &mdash; SuperShot auto-detects the overlap and stitches them into one seamless tall screenshot.</p>
         </div>
 
         <div class="feature-card reveal" style="padding:28px;">
           <div class="feature-icon" style="background:linear-gradient(135deg, rgba(0,122,255,0.18), rgba(0,229,255,0.1));">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--blue-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
           </div>
-          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Better Text Annotation</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Multi-line text with drag-to-reposition, five font sizes, and keyboard shortcuts. Enter commits, Shift+Enter newlines.</p>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Live, Editable Annotation</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Shapes preview as you drag, and text stays transparent, re-editable and draggable until you save &mdash; retouch anything before exporting.</p>
         </div>
 
         <div class="feature-card reveal" style="padding:28px;">
           <div class="feature-icon" style="background:linear-gradient(135deg, rgba(175,82,222,0.18), rgba(88,86,214,0.1));">
             <svg viewBox="0 0 24 24" fill="none" stroke="#AF52DE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h2M6 12h8M6 16h6"/></svg>
           </div>
-          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Reworked Shortcuts</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Cmd/Ctrl+3 records a GIF, Cmd/Ctrl+4 captures a region, Cmd/Ctrl+Shift+S saves a fullscreen. Old broken bindings auto-migrate on upgrade.</p>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Configurable Shortcuts</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Region, full screen, scrolling and timed capture each have a global hotkey you can remap. The recorder opens from the app, with its own in-recording keys.</p>
         </div>
 
         <div class="feature-card reveal" style="padding:28px;">
           <div class="feature-icon" style="background:linear-gradient(135deg, rgba(255,204,0,0.18), rgba(255,149,0,0.1));">
             <svg viewBox="0 0 24 24" fill="none" stroke="#FFCC00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
           </div>
-          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">First-Run Wizard</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Welcome screen walks new users through Screen Recording permission grant on macOS, with a one-click Quit &amp; Relaunch step. Notarized by Apple.</p>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Rebuilt &amp; Faster</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">A ground-up rebuild on a native Rust core &mdash; lighter, quicker to launch, single-instance, and EV code-signed for verified trust.</p>
         </div>
 
         <div class="feature-card reveal" style="padding:28px;">
           <div class="feature-icon" style="background:linear-gradient(135deg, rgba(0,229,255,0.18), rgba(0,122,255,0.1));">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan, #00E5FF)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           </div>
-          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">Smaller, Faster</h3>
-          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">Dead-code cleanup shrank installers by &sim;24% (135&nbsp;MB &rarr; 112&nbsp;MB on macOS; 114&nbsp;MB &rarr; 96&nbsp;MB on Windows).</p>
+          <h3 style="font-size:20px; font-weight:700; margin-bottom:8px;">iOS &mdash; Coming Soon</h3>
+          <p style="color:var(--gray-500); font-size:15px; line-height:1.5;">SuperShot is coming to iPhone and iPad. A native iOS build is in development &mdash; capture and mark up on the go.</p>
         </div>
 
       </div>
@@ -1346,36 +1345,44 @@
             </svg>
           </div>
           <h3>Windows</h3>
-          <div class="version">v1.1.3 &middot; Windows 10+</div>
-          <div class="size">96 MB &middot; x64 NSIS Installer</div>
+          <div class="version">v2.0.0 &middot; Windows 10+</div>
+          <div class="size">~48 MB &middot; x64 Installer</div>
           <div class="signed-badge">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             EV Code Signed
           </div>
-          <a href="https://github.com/ts-robotic/supershot-windows/releases/download/v1.1.3/SuperShot-Setup-1.1.3.exe" class="btn btn-primary">
+          <a href="https://github.com/ts-robotic/supershot-windows/releases/download/v2.0.0/SuperShot_2.0.0_x64-setup.exe" class="btn btn-primary">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download for Windows
           </a>
         </div>
 
         <!-- macOS -->
-        <div class="download-card reveal">
+        <div class="download-card soon reveal">
           <div class="os-icon">
             <svg viewBox="0 0 24 24" fill="var(--blue-400)">
               <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
             </svg>
           </div>
           <h3>macOS</h3>
-          <div class="version">v1.1.3 &middot; macOS 12+</div>
-          <div class="size">112 MB &middot; Apple Silicon DMG</div>
-          <div class="signed-badge">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Notarized by Apple
+          <div class="version">Universal &middot; macOS 12+</div>
+          <div class="size">Apple Silicon + Intel</div>
+          <div class="coming-badge">Coming soon</div>
+          <a class="btn btn-secondary">Coming soon</a>
+        </div>
+
+        <!-- iOS -->
+        <div class="download-card soon reveal">
+          <div class="os-icon">
+            <svg viewBox="0 0 24 24" fill="var(--blue-400)">
+              <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+            </svg>
           </div>
-          <a href="https://github.com/ts-robotic/supershot-mac/releases/download/v1.1.3/SuperShot-1.1.3-arm64.dmg" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download for macOS
-          </a>
+          <h3>iOS</h3>
+          <div class="version">iPhone &amp; iPad</div>
+          <div class="size">Native app</div>
+          <div class="coming-badge">Coming soon</div>
+          <a class="btn btn-secondary">Coming soon</a>
         </div>
       </div>
     </div>
@@ -1429,7 +1436,7 @@
         Copyright &copy; 2026 Mortgage Magick Limited. All rights reserved.<br><br>
         <a href="https://github.com/ts-robotic/supershot-windows/releases">Windows Releases</a>
         &nbsp;&middot;&nbsp;
-        <a href="https://github.com/ts-robotic/supershot-mac/releases">macOS Releases</a>
+        macOS &amp; iOS coming soon
       </div>
     </div>
   </footer>

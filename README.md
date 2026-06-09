@@ -1,8 +1,8 @@
 # SuperShot Website
 
-Official marketing website for **SuperShot** — the professional screenshot & annotation tool.
+Official marketing website for **SuperShot** — screenshots and built-in screen recording in one app.
 
-**Live site:** [https://tanjirsugar.github.io/SuperShot-Site/](https://tanjirsugar.github.io/SuperShot-Site/)
+**Live site:** [https://supershot.tsrobotic.com](https://supershot.tsrobotic.com)
 
 ## About SuperShot
 
@@ -27,8 +27,9 @@ Or just open `index.html` in a browser.
 
 ## Download links
 
-- **Windows:** [SuperShot Setup 1.0.0.exe](https://github.com/tanjirsugar/supershot-windows/releases/download/v1.0.0/SuperShot.Setup.1.0.0.exe)
-- **macOS:** [SuperShot-1.0.0-arm64.dmg](https://github.com/tanjirsugar/supershot-mac/releases/download/v1.0.0/SuperShot-1.0.0-arm64.dmg)
+- **Windows:** [SuperShot_2.0.0_x64-setup.exe](https://github.com/ts-robotic/supershot-windows/releases/download/v2.0.0/SuperShot_2.0.0_x64-setup.exe) — v2.0, EV code-signed
+- **macOS:** universal build coming soon
+- **iOS:** native app in development
 
 ---
 
