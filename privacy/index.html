@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — SuperShot</title>
+  <meta name="description" content="SuperShot privacy policy. SuperShot does not collect, transmit, or sell your personal data. Everything the app captures stays on your device.">
+  <link rel="icon" href="../icon-128.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --paper: #EEF2F9;
+      --paper-2: #F6F8FC;
+      --surface: #FFFFFF;
+      --ink: #0B1426;
+      --ink-soft: #43506A;
+      --muted: #8190A6;
+      --line: #E1E7F1;
+      --blue: #2D6BFF;
+      --blue-deep: #1742C7;
+      --cyan: #07BFD6;
+      --grad: linear-gradient(135deg, #2D6BFF 0%, #1FA8E0 55%, #07CCDA 100%);
+      --shadow-sm: 0 1px 2px rgba(16,40,90,0.06), 0 4px 14px rgba(16,40,90,0.05);
+      --shadow-md: 0 8px 30px rgba(20,45,100,0.10);
+      --r: 18px; --r-sm: 12px;
+      --display: 'Bricolage Grotesque', 'Hanken Grotesk', sans-serif;
+      --body: 'Hanken Grotesk', sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--body);
+      color: var(--ink);
+      background: var(--paper);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.55;
+    }
+
+    .bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(900px 600px at 80% -5%, rgba(45,107,255,0.10), transparent 60%),
+        radial-gradient(700px 500px at -5% 30%, rgba(7,191,214,0.08), transparent 60%),
+        linear-gradient(var(--paper), var(--paper-2));
+    }
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+      background-image:
+        linear-gradient(rgba(45,107,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,107,255,0.045) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 20%, #000 0%, transparent 75%);
+      -webkit-mask-image: radial-gradient(circle at 50% 20%, #000 0%, transparent 75%);
+    }
+
+    .container { max-width: 860px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 18px 0; transition: all .3s ease;
+    }
+    nav.scrolled {
+      padding: 12px 0; background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border-bottom: 1px solid var(--line);
+    }
+    nav .container { max-width: 1180px; display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--ink); }
+    .brand .logo { width: 34px; height: 34px; filter: drop-shadow(0 4px 10px rgba(45,107,255,0.30)); }
+    .brand b { font-family: var(--display); font-weight: 700; font-size: 21px; letter-spacing: -0.02em; }
+    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 15px; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 9px;
+      padding: 10px 18px; border-radius: 11px; font-size: 15px; font-weight: 600;
+      font-family: var(--body); text-decoration: none; cursor: pointer; border: none;
+      transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .25s;
+      background: var(--grad); color: #fff; box-shadow: 0 8px 22px rgba(45,107,255,0.32);
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(45,107,255,0.42); }
+
+    /* ── HEADER ── */
+    .page-head { padding: 160px 0 24px; }
+    .eyebrow {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--blue);
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-family: var(--display); font-weight: 800;
+      font-size: clamp(34px, 4.8vw, 54px); line-height: 1.04; letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .updated {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: var(--mono); font-size: 12px; color: var(--ink-soft);
+      background: var(--surface); border: 1px solid var(--line); border-radius: 100px;
+      padding: 6px 14px; box-shadow: var(--shadow-sm);
+    }
+    .updated .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
+    .intro { font-size: 17px; color: var(--ink-soft); max-width: 680px; margin-top: 22px; }
+
+    /* ── SHORT VERSION CALLOUT ── */
+    .tldr {
+      margin: 44px 0 10px;
+      background: linear-gradient(150deg, #0B1426, #16275a);
+      border-radius: var(--r); padding: 30px 32px; color: #fff;
+      box-shadow: var(--shadow-md);
+    }
+    .tldr h2 { font-family: var(--display); font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #fff; }
+    .tldr p { color: #B7C5E0; font-size: 16px; }
+    .tldr p strong { color: #fff; }
+
+    /* ── ARTICLE ── */
+    article { padding: 30px 0 90px; }
+    article section {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
+      padding: 32px 34px; box-shadow: var(--shadow-sm); margin-top: 22px;
+    }
+    article h2 {
+      font-family: var(--display); font-size: 22px; font-weight: 700;
+      letter-spacing: -0.01em; margin-bottom: 14px;
+    }
+    article h3 { font-family: var(--display); font-size: 16.5px; font-weight: 700; margin: 18px 0 6px; }
+    article p { font-size: 15.5px; color: var(--ink-soft); margin-top: 10px; }
+    article p:first-of-type { margin-top: 0; }
+    article ul { list-style: none; margin-top: 12px; }
+    article li {
+      position: relative; padding-left: 28px; margin-top: 10px;
+      font-size: 15.5px; color: var(--ink-soft);
+    }
+    article li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 14px; height: 14px; border-radius: 4px;
+      background: linear-gradient(135deg, rgba(45,107,255,0.16), rgba(7,191,214,0.16));
+      border: 1px solid rgba(45,107,255,0.25);
+    }
+    article strong { color: var(--ink); font-weight: 700; }
+    article a { color: var(--blue); text-decoration: none; }
+    article a:hover { text-decoration: underline; }
+    .kbd-path {
+      font-family: var(--mono); font-size: 13px; color: var(--ink);
+      background: var(--paper-2); border: 1px solid var(--line); border-bottom-width: 2px;
+      padding: 2px 8px; border-radius: 7px; white-space: nowrap;
+    }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--line); padding: 50px 0; text-align: center; background: var(--surface); position: relative; z-index: 1; }
+    .foot-brand { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; }
+    .foot-brand .logo { width: 26px; height: 26px; }
+    .foot-brand b { font-family: var(--display); font-weight: 700; font-size: 17px; }
+    .foot-txt { font-size: 13.5px; color: var(--muted); line-height: 1.9; }
+    .foot-txt strong { color: var(--ink-soft); }
+    .foot-txt a { color: var(--blue); text-decoration: none; } .foot-txt a:hover { text-decoration: underline; }
+
+    @media (max-width: 700px) {
+      .page-head { padding-top: 130px; }
+      article section { padding: 26px 22px; }
+      .nav-links li:not(:last-child) { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="bg-grid"></div>
+
+  <!-- Logo sprite: capture frame + lens/record dot -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="ssg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#2D6BFF"/><stop offset="0.55" stop-color="#1FA8E0"/><stop offset="1" stop-color="#07CCDA"/>
+      </linearGradient>
+      <symbol id="ss" viewBox="0 0 48 48">
+        <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#ssg)"/>
+        <path d="M16 11 H11 V16 M32 11 H37 V16 M16 37 H11 V32 M32 37 H37 V32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.96"/>
+        <circle cx="24" cy="24" r="7.6" fill="none" stroke="#fff" stroke-width="2.4"/>
+        <circle cx="24" cy="24" r="3.1" fill="#fff"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ── NAV ── -->
+  <nav id="nav">
+    <div class="container">
+      <a href="../" class="brand"><svg class="logo"><use href="#ss"/></svg><b>SuperShot</b></a>
+      <ul class="nav-links">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="../#how">How it works</a></li>
+        <li><a href="../#shortcuts">Shortcuts</a></li>
+        <li><a href="../#download" class="btn">Download</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── HEADER ── -->
+  <header class="page-head">
+    <div class="container">
+      <div class="eyebrow">Privacy</div>
+      <h1>SuperShot Privacy Policy</h1>
+      <span class="updated"><span class="dot"></span>Last updated: 10 June 2026</span>
+      <p class="intro">SuperShot is a Windows screenshot and screen-recording application developed by <strong>TS Robotics</strong> and distributed by <strong>Mortgage Magick Limited</strong> (trading as Mortgage Magic). This policy explains how SuperShot handles your information.</p>
+    </div>
+  </header>
+
+  <article>
+    <div class="container">
+
+      <div class="tldr">
+        <h2>The short version</h2>
+        <p>SuperShot <strong>does not collect, transmit, or sell your personal data</strong>. Everything the app captures stays on your device. There is no telemetry, no analytics, no advertising, and no account.</p>
+      </div>
+
+      <section>
+        <h2>What the app accesses</h2>
+        <h3>Screen content</h3>
+        <p>When you take a screenshot or record your screen, SuperShot captures the screen region you select. These captures are created at your request and saved to the location you choose on your own device.</p>
+        <h3>Microphone (only when recording with audio)</h3>
+        <p>If you start a screen recording with microphone audio enabled, SuperShot accesses your microphone to record sound into the video file. The microphone is used only during an active recording you have started, and the audio is written only into your local recording. SuperShot does not access the microphone at any other time.</p>
+      </section>
+
+      <section>
+        <h2>What we do not do</h2>
+        <ul>
+          <li>We do not transmit your screenshots, recordings, or microphone audio anywhere. They are not uploaded to us or to any third party.</li>
+          <li>We do not collect usage analytics or telemetry.</li>
+          <li>We do not display advertising or include advertising SDKs.</li>
+          <li>We do not require an account, and we do not collect your name, email, or contact details through the app.</li>
+          <li>We do not bundle third-party software with the app.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Where your captures are stored</h2>
+        <p>All screenshots and recordings are stored locally on your device, in the folders you select. You are in control of these files: you can move, share, or delete them at any time. Because they never leave your device through SuperShot, we have no access to them.</p>
+      </section>
+
+      <section>
+        <h2>Permissions</h2>
+        <p>SuperShot is a packaged Windows desktop application. It requests the microphone capability so that audio recording can work when you choose to enable it. You can manage app permissions, including microphone access, in Windows Settings under <span class="kbd-path">Privacy &amp; security</span>.</p>
+      </section>
+
+      <section>
+        <h2>Children's privacy</h2>
+        <p>SuperShot is a general-purpose productivity tool and is not directed at children. It does not knowingly collect any information from anyone, including children.</p>
+      </section>
+
+      <section>
+        <h2>Changes to this policy</h2>
+        <p>If this policy changes, we will update the date at the top and post the revised version at this address.</p>
+      </section>
+
+      <section>
+        <h2>Contact</h2>
+        <p>For any questions about this policy or about SuperShot, contact <strong>TS Robotics</strong> via <a href="https://supershot.tsrobotic.com">supershot.tsrobotic.com</a>.</p>
+      </section>
+
+    </div>
+  </article>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="foot-brand"><svg class="logo"><use href="#ss"/></svg><b>SuperShot</b></div>
+      <div class="foot-txt">
+        Developed by <strong>TS Robotics</strong>. Solely licensed to <strong>Mortgage Magick Limited</strong>, trading as <strong>Mortgage Magic</strong>, for distribution.<br>
+        Copyright © 2026 Mortgage Magick Limited. All rights reserved.<br><br>
+        <a href="../">Home</a> · <a href="./">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30));
+  </script>
+</body>
+</html>
