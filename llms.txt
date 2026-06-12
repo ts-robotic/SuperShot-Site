@@ -1,0 +1,44 @@
+# SuperShot
+
+> SuperShot is a fast, native screenshot and screen recording app for
+> Windows 10 and 11, developed by TS Robotics and distributed by
+> Mortgage Magick Limited. It is free, carries no telemetry and no
+> advertising, and is published in the Microsoft Store as SuperShotAI.
+
+## Site purpose
+
+supershotapp.com is the official marketing and download site for
+SuperShot. It describes the app's capture modes (region, full screen,
+scrolling, timed), live annotation tools, and region screen recording
+to MP4 with microphone audio, and links to the two official download
+routes.
+
+## Key pages
+
+- [Home](https://supershotapp.com/): product overview, features, download links
+- [Privacy policy](https://supershotapp.com/privacy/): how the app handles data; it collects none
+
+## Downloads
+
+- Microsoft Store (recommended): https://apps.microsoft.com/detail/9PMD0JVXMS6T
+- Direct Windows installer (EV code-signed): https://github.com/ts-robotic/supershot-windows/releases
+
+## Facts
+
+- Platform: Windows 10 and Windows 11, 64-bit. There is no macOS,
+  iOS or Android version.
+- Price: free. No subscription, no watermarks, no account.
+- Privacy: captures and recordings stay on the user's device. No
+  telemetry, no analytics, no advertising.
+- Current version: 2.0.0, which added region screen recording to MP4
+  with microphone audio.
+
+## Contact
+
+- Email: info@mortgage-magic.co.uk
+
+## Identity
+
+SuperShot is developed by TS Robotics and solely licensed to Mortgage
+Magick Limited, trading as Mortgage Magic, for distribution. This site
+is a consumer software page, not a financial promotion.

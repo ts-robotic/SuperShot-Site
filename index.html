@@ -1,308 +1,553 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SuperShot — Screenshots & Screen Recording in One App</title>
-  <meta name="description" content="SuperShot by TS Robotics. Pixel-perfect screenshots with powerful annotation, plus built-in screen recording to MP4. One app, one hotkey. Windows now; macOS and iOS coming soon.">
-  <link rel="icon" href="icon-128.png" type="image/png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <title>SuperShot | Fast Screenshots and Screen Recording for Windows</title>
+  <meta name="description" content="Fast, native screenshots and screen recording for Windows 10 and 11. Capture, annotate and record any region to MP4 with mic audio. Free, no telemetry.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#060A13">
+  <link rel="canonical" href="https://supershotapp.com/">
+  <link rel="icon" href="/icon-128.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="SuperShot">
+  <meta property="og:title" content="SuperShot. Fast screenshots and screen recording for Windows.">
+  <meta property="og:description" content="Region, full-screen, scrolling and timed capture with annotation, plus region recording to MP4 with microphone audio. Native, free, no telemetry.">
+  <meta property="og:url" content="https://supershotapp.com/">
+  <meta property="og:image" content="https://supershotapp.com/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <!--
+    Fonts: Clash Display and Satoshi by the Indian Type Foundry,
+    via Fontshare (ITF Free Font Licence, see /assets/fonts/FFL.txt).
+    Self-hosted variable woff2, downloaded 11 June 2026.
+  -->
+  <link rel="preload" href="/assets/fonts/ClashDisplay-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/Satoshi-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <style>
+    /* ── Fonts ── */
+    @font-face {
+      font-family: 'Clash Display';
+      src: url('/assets/fonts/ClashDisplay-Variable.woff2') format('woff2');
+      font-weight: 200 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('/assets/fonts/Satoshi-Variable.woff2') format('woff2');
+      font-weight: 300 900; font-style: normal; font-display: swap;
+    }
+    /* Metric-compatible fallbacks: hold layout while the webfonts load */
+    @font-face {
+      font-family: 'Clash Fallback';
+      src: local('Segoe UI Semibold'), local('Segoe UI');
+      size-adjust: 96%; ascent-override: 100%; descent-override: 24%; line-gap-override: 0%;
+    }
+    @font-face {
+      font-family: 'Satoshi Fallback';
+      src: local('Segoe UI'), local('Arial');
+      size-adjust: 98%; ascent-override: 102%; descent-override: 25%; line-gap-override: 0%;
+    }
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --paper: #EEF2F9;
-      --paper-2: #F6F8FC;
-      --surface: #FFFFFF;
-      --ink: #0B1426;
-      --ink-soft: #43506A;
-      --muted: #8190A6;
-      --line: #E1E7F1;
-      --blue: #2D6BFF;
-      --blue-deep: #1742C7;
-      --cyan: #07BFD6;
-      --rec: #FF4D4D;
-      --grad: linear-gradient(135deg, #2D6BFF 0%, #1FA8E0 55%, #07CCDA 100%);
-      --shadow-sm: 0 1px 2px rgba(16,40,90,0.06), 0 4px 14px rgba(16,40,90,0.05);
-      --shadow-md: 0 8px 30px rgba(20,45,100,0.10);
-      --shadow-lg: 0 30px 70px rgba(20,45,100,0.16);
-      --r: 18px; --r-sm: 12px;
-      --display: 'Bricolage Grotesque', 'Hanken Grotesk', sans-serif;
-      --body: 'Hanken Grotesk', sans-serif;
-      --mono: 'JetBrains Mono', monospace;
+      --bg: #060A13;
+      --bg-2: #0A101D;
+      --card: #0D1524;
+      --card-2: #111B2E;
+      --line: #1D2A42;
+      --line-soft: #16213A;
+      --text: #ECF1FA;
+      --text-2: #AEBBD1;
+      --mut: #7C8BA5;
+      --blue: #3D78FF;
+      --cyan: #19D3E6;
+      --btn-blue: #2557E8;
+      --btn-blue-hi: #2E63F6;
+      --rec: #FF5C5C;
+      --grad: linear-gradient(120deg, #3D78FF 0%, #1FA8E0 55%, #19D3E6 100%);
+      --r: 16px; --r-sm: 10px;
+      --display: 'Clash Display', 'Clash Fallback', system-ui, sans-serif;
+      --body: 'Satoshi', 'Satoshi Fallback', system-ui, sans-serif;
+      --mono: ui-monospace, 'Cascadia Code', Consolas, 'Segoe UI Mono', monospace;
+      --z-nav: 10; --z-skip: 20;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-padding-top: 96px; }
     body {
-      font-family: var(--body);
-      color: var(--ink);
-      background: var(--paper);
-      overflow-x: hidden;
+      font-family: var(--body); font-weight: 420;
+      color: var(--text); background: var(--bg);
+      line-height: 1.6; overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      line-height: 1.55;
     }
+    ::selection { background: rgba(25,211,230,0.28); color: var(--text); }
 
-    /* Blueprint grid + soft glows */
+    /* Page backdrop: dimmed desktop with a faint capture grid */
     .bg {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background:
-        radial-gradient(900px 600px at 80% -5%, rgba(45,107,255,0.10), transparent 60%),
-        radial-gradient(700px 500px at -5% 30%, rgba(7,191,214,0.08), transparent 60%),
-        linear-gradient(var(--paper), var(--paper-2));
+        radial-gradient(1100px 640px at 78% -10%, rgba(61,120,255,0.13), transparent 62%),
+        radial-gradient(800px 540px at -8% 38%, rgba(25,211,230,0.07), transparent 60%),
+        var(--bg);
     }
     .bg-grid {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.6;
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
       background-image:
-        linear-gradient(rgba(45,107,255,0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(45,107,255,0.045) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(circle at 50% 20%, #000 0%, transparent 75%);
-      -webkit-mask-image: radial-gradient(circle at 50% 20%, #000 0%, transparent 75%);
+        linear-gradient(rgba(110,140,200,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(110,140,200,0.055) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(ellipse at 50% 12%, #000 10%, transparent 72%);
+      -webkit-mask-image: radial-gradient(ellipse at 50% 12%, #000 10%, transparent 72%);
     }
 
     .container { max-width: 1180px; margin: 0 auto; padding: 0 28px; position: relative; z-index: 1; }
-    section { padding: 110px 0; }
+    main section { padding: 104px 0; }
+
+    .skip {
+      position: fixed; top: 14px; left: 14px; z-index: var(--z-skip);
+      padding: 12px 18px; background: var(--btn-blue); color: #fff;
+      font-weight: 600; font-size: 15px; text-decoration: none; border-radius: 9px;
+      transform: translateY(-200%); transition: transform .2s ease-out;
+    }
+    .skip:focus-visible { transform: none; }
+
+    a:focus-visible, button:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px;
+    }
 
     .eyebrow {
       font-family: var(--mono); font-size: 12px; font-weight: 500;
-      letter-spacing: 0.28em; text-transform: uppercase; color: var(--blue);
-      margin-bottom: 18px;
+      letter-spacing: 0.26em; text-transform: uppercase; color: var(--cyan);
+      margin-bottom: 16px;
     }
-    .h-sec { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 4.4vw, 46px); line-height: 1.06; letter-spacing: -0.02em; }
-    .sub { font-size: 18px; color: var(--ink-soft); max-width: 620px; margin: 14px auto 0; }
+    .h-sec {
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(31px, 4.4vw, 50px); line-height: 1.04; letter-spacing: -0.015em;
+    }
+    .sub { font-size: 18px; color: var(--text-2); max-width: 60ch; margin: 16px auto 0; }
     .center { text-align: center; }
     .center .sub { margin-inline: auto; }
 
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 18px 0; transition: all .3s ease;
-    }
-    nav.scrolled {
-      padding: 12px 0; background: rgba(255,255,255,0.72);
-      backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
-      border-bottom: 1px solid var(--line);
-    }
-    nav .container { display: flex; align-items: center; justify-content: space-between; }
-    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--ink); }
-    .brand .logo { width: 34px; height: 34px; filter: drop-shadow(0 4px 10px rgba(45,107,255,0.30)); }
-    .brand b { font-family: var(--display); font-weight: 700; font-size: 21px; letter-spacing: -0.02em; }
-    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
-    .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 15px; font-weight: 500; transition: color .2s; }
-    .nav-links a:hover { color: var(--ink); }
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; gap: 9px;
-      padding: 13px 24px; border-radius: 11px; font-size: 15px; font-weight: 600;
-      font-family: var(--body); text-decoration: none; cursor: pointer; border: none;
-      transition: transform .25s cubic-bezier(.2,.9,.3,1), box-shadow .25s, background .2s;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 50px; padding: 12px 24px; border-radius: 12px;
+      font-family: var(--body); font-size: 16px; font-weight: 600; line-height: 1.2;
+      text-decoration: none; cursor: pointer; border: 1px solid transparent;
+      transition: transform .2s ease-out, box-shadow .2s ease-out, border-color .2s ease-out, background-color .2s ease-out;
     }
-    .btn svg { width: 18px; height: 18px; }
-    .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 22px rgba(45,107,255,0.32); }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(45,107,255,0.42); }
-    .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: var(--shadow-sm); }
-    .btn-ghost:hover { transform: translateY(-2px); border-color: #C7D3E6; }
-    .nav-cta { padding: 10px 18px; }
+    .btn svg { width: 18px; height: 18px; flex: none; }
+    .btn-primary {
+      background: var(--btn-blue); color: #fff;
+      box-shadow: 0 10px 28px rgba(37,87,232,0.35), inset 0 1px 0 rgba(255,255,255,0.16);
+    }
+    .btn-primary:hover { background: var(--btn-blue-hi); transform: translateY(-1px); box-shadow: 0 14px 34px rgba(37,87,232,0.45), inset 0 1px 0 rgba(255,255,255,0.16); }
+    .btn-ghost { background: var(--card); color: var(--text); border-color: var(--line); }
+    .btn-ghost:hover { border-color: #2C3D60; transform: translateY(-1px); }
 
-    /* ── HERO ── */
-    .hero { padding: 150px 0 60px; }
-    .hero .container { display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px; align-items: center; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 9px; padding: 7px 15px;
-      background: var(--surface); border: 1px solid var(--line); border-radius: 100px;
-      font-size: 13px; font-weight: 600; color: var(--blue-deep); box-shadow: var(--shadow-sm);
-      animation: rise .7s ease both;
+    /* Microsoft Store badge button */
+    .btn-store {
+      display: inline-flex; align-items: center; gap: 12px;
+      min-height: 56px; padding: 10px 22px 10px 16px; border-radius: 12px;
+      background: #101826; border: 1px solid var(--line);
+      text-decoration: none; color: var(--text);
+      box-shadow: 0 10px 26px rgba(3,8,20,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: transform .2s ease-out, border-color .2s ease-out, box-shadow .2s ease-out;
     }
-    .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 0 0 rgba(7,191,214,.5); animation: ping 2s infinite; }
+    .btn-store:hover { transform: translateY(-1px); border-color: #2C3D60; box-shadow: 0 14px 32px rgba(3,8,20,0.6), inset 0 1px 0 rgba(255,255,255,0.05); }
+    .btn-store svg { width: 26px; height: 26px; flex: none; }
+    .btn-store .t { display: flex; flex-direction: column; line-height: 1.15; text-align: left; }
+    .btn-store .t small { font-size: 11.5px; font-weight: 500; color: var(--mut); letter-spacing: 0.02em; }
+    .btn-store .t strong { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+    .btn-store.big { min-height: 62px; }
+
+    /* ── Nav ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+      padding: 13px 0; transition: background-color .25s ease-out, border-color .25s ease-out;
+      border-bottom: 1px solid transparent;
+    }
+    .nav.scrolled {
+      background: rgba(6,10,19,0.82);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom-color: var(--line-soft);
+    }
+    .nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; color: var(--text); }
+    .brand .logo { width: 34px; height: 34px; }
+    .brand b { font-family: var(--display); font-weight: 600; font-size: 21px; letter-spacing: -0.01em; }
+    .nav-links { display: flex; align-items: center; gap: 6px; list-style: none; }
+    .nav-links a:not(.btn) {
+      display: inline-block; padding: 10px 14px; color: var(--text-2);
+      text-decoration: none; font-size: 15px; font-weight: 500; border-radius: 8px;
+      transition: color .15s ease-out, background-color .15s ease-out;
+    }
+    .nav-links a:not(.btn):hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-links .btn { min-height: 44px; padding: 9px 18px; font-size: 15px; margin-left: 10px; }
+
+    /* ── Hero ── */
+    .hero { padding: 168px 0 84px; }
+    .hero-grid { display: grid; grid-template-columns: 1.04fr 1fr; gap: 60px; align-items: center; }
+    .hud-badge {
+      display: inline-flex; align-items: center; gap: 9px; padding: 8px 15px;
+      background: rgba(25,211,230,0.07); border: 1px solid rgba(25,211,230,0.28); border-radius: 100px;
+      font-family: var(--mono); font-size: 11.5px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cyan);
+    }
+    .hud-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); }
     .hero h1 {
-      font-family: var(--display); font-weight: 800;
-      font-size: clamp(44px, 5.6vw, 72px); line-height: 1.0; letter-spacing: -0.035em;
-      margin: 26px 0 22px; animation: rise .8s ease .08s both;
+      font-family: var(--display); font-weight: 600;
+      font-size: clamp(38px, 4.1vw, 59px); line-height: 1.04; letter-spacing: -0.02em;
+      margin: 26px 0 22px;
     }
-    .hero h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 19px; color: var(--ink-soft); max-width: 520px; margin-bottom: 34px; animation: rise .8s ease .16s both; }
-    .hero p strong { color: var(--ink); font-weight: 700; }
-    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; animation: rise .8s ease .24s both; }
-    .hero-stats { display: flex; gap: 34px; margin-top: 46px; animation: rise .8s ease .32s both; }
-    .hero-stats .v { font-family: var(--display); font-weight: 700; font-size: 26px; color: var(--ink); letter-spacing: -0.02em; }
-    .hero-stats .v.accent { color: var(--blue); }
-    .hero-stats .l { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .hero h1 .grad {
+      background: var(--grad);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .hero .lede { font-size: 19px; color: var(--text-2); max-width: 54ch; margin-bottom: 34px; }
+    .hero .lede strong { color: var(--text); font-weight: 700; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: stretch; }
+    .hero-meta {
+      margin-top: 22px; font-family: var(--mono); font-size: 12.5px;
+      letter-spacing: 0.04em; color: var(--mut);
+    }
 
-    /* ── HERO GRAPHIC: light capture/record mockup ── */
-    .glass {
-      position: relative; border-radius: 20px; background: var(--surface);
-      border: 1px solid var(--line); box-shadow: var(--shadow-lg);
-      animation: rise 1s ease .2s both, floaty 7s ease-in-out infinite 1s;
+    /* Load-in: one orchestrated rise, content visible without JS */
+    @media (prefers-reduced-motion: no-preference) {
+      .rise { animation: rise .55s cubic-bezier(.2,.7,.3,1) both; }
+      .rise.d1 { animation-delay: .06s; } .rise.d2 { animation-delay: .12s; }
+      .rise.d3 { animation-delay: .18s; } .rise.d4 { animation-delay: .24s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
     }
-    .glass::after { content:''; position:absolute; inset:0; border-radius:20px; box-shadow: inset 0 1px 0 #fff; pointer-events:none; }
-    .win-bar { display: flex; align-items: center; gap: 7px; padding: 13px 16px; border-bottom: 1px solid var(--line); }
-    .win-bar i { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
-    .win-bar i:nth-child(1){ background:#FF5F57; } .win-bar i:nth-child(2){ background:#FEBC2E; } .win-bar i:nth-child(3){ background:#28C840; }
-    .win-bar .url { margin-left: 12px; font-family: var(--mono); font-size: 11px; color: var(--muted); }
-    .canvas {
-      position: relative; aspect-ratio: 4/3; border-radius: 0 0 20px 20px; overflow: hidden;
-      background:
-        radial-gradient(420px 300px at 75% 15%, rgba(45,107,255,0.10), transparent 60%),
-        repeating-linear-gradient(0deg, rgba(11,20,38,0.035) 0 1px, transparent 1px 26px),
-        repeating-linear-gradient(90deg, rgba(11,20,38,0.035) 0 1px, transparent 1px 26px),
-        linear-gradient(180deg, #FBFCFF, #EEF3FB);
+
+    /* ── Hero mockup: a region capture in progress ── */
+    .shot { position: relative; }
+    .shot .glow {
+      position: absolute; inset: -8% -12%; z-index: 0; pointer-events: none;
+      background: radial-gradient(58% 58% at 55% 45%, rgba(61,120,255,0.17), transparent 70%);
     }
-    /* faux content blocks behind the selection */
-    .canvas .blk { position:absolute; border-radius:7px; background: #DCE5F3; }
+    .winframe {
+      position: relative; z-index: 1; border-radius: 14px; overflow: hidden;
+      background: #0B1322; border: 1px solid var(--line);
+      box-shadow: 0 40px 90px rgba(2,6,16,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .winbar {
+      display: flex; align-items: center; gap: 9px; padding: 10px 14px;
+      border-bottom: 1px solid var(--line-soft); background: #0C1424;
+    }
+    .winbar .wlogo { width: 16px; height: 16px; }
+    .winbar .wtitle { font-family: var(--mono); font-size: 11px; color: var(--mut); letter-spacing: 0.05em; }
+    .winbar .wbtns { margin-left: auto; display: flex; gap: 6px; }
+    .winbar .wbtns span { width: 26px; height: 20px; border-radius: 5px; display: grid; place-items: center; }
+    .winbar .wbtns svg { width: 9px; height: 9px; stroke: var(--mut); stroke-width: 1.4; fill: none; }
+    .canvas { position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: #0E1726; }
+    /* skeleton desktop content */
+    .blk { position: absolute; border-radius: 6px; background: #182338; }
+    .blk.b2 { background: #141E31; }
+    /* dim everything outside the selection */
     .marquee {
-      position: absolute; left: 18%; top: 22%; width: 56%; height: 50%;
-      border: 2px solid var(--blue); border-radius: 6px;
-      background: rgba(45,107,255,0.06);
-      box-shadow: 0 0 0 9999px rgba(11,20,38,0.06);
-      animation: breathe 4s ease-in-out infinite;
+      position: absolute; left: 13%; top: 17%; width: 57%; height: 52%;
+      box-shadow: 0 0 0 9999px rgba(4,8,17,0.62);
+      background: rgba(25,211,230,0.03); border-radius: 3px;
     }
-    .marquee .hbar, .marquee .vbar { position:absolute; background: rgba(45,107,255,0.55); }
-    .handle { position: absolute; width: 11px; height: 11px; background: #fff; border: 2px solid var(--blue); border-radius: 3px; }
-    .handle.tl{ left:-6px; top:-6px;} .handle.tr{ right:-6px; top:-6px;} .handle.bl{ left:-6px; bottom:-6px;} .handle.br{ right:-6px; bottom:-6px;}
-    .dim {
-      position: absolute; bottom: -30px; left: 50%; transform: translateX(-50%);
-      font-family: var(--mono); font-size: 11px; color:#fff; background: var(--ink);
-      padding: 3px 9px; border-radius: 5px; white-space: nowrap;
+    .ants { position: absolute; inset: -1px; width: calc(100% + 2px); height: calc(100% + 2px); overflow: visible; }
+    .ants rect {
+      width: 100%; height: 100%; fill: none;
+      stroke: var(--cyan); stroke-width: 1.6; stroke-dasharray: 7 6;
+      vector-effect: non-scaling-stroke;
     }
-    .crosshair { position:absolute; left:50%; top:50%; width:30px; height:30px; transform:translate(-50%,-50%); }
-    .crosshair::before,.crosshair::after{ content:''; position:absolute; background: var(--cyan); }
-    .crosshair::before{ left:50%; top:0; width:1.5px; height:100%; transform:translateX(-50%); }
-    .crosshair::after{ top:50%; left:0; height:1.5px; width:100%; transform:translateY(-50%); }
+    @media (prefers-reduced-motion: no-preference) {
+      .ants rect { animation: march 0.9s linear infinite; }
+      @keyframes march { to { stroke-dashoffset: -13; } }
+    }
+    .handle {
+      position: absolute; width: 10px; height: 10px; border-radius: 2.5px;
+      background: #0B1322; border: 1.6px solid var(--cyan);
+    }
+    .handle.tl { left: -5px; top: -5px; } .handle.tr { right: -5px; top: -5px; }
+    .handle.bl { left: -5px; bottom: -5px; } .handle.br { right: -5px; bottom: -5px; }
+    .dimtag {
+      position: absolute; right: -1px; bottom: -34px;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+      color: #06121C; background: var(--cyan); padding: 4px 9px; border-radius: 6px;
+      font-weight: 600; white-space: nowrap;
+    }
+    /* annotation inside the selection */
+    .anno-arrow { position: absolute; left: 9%; bottom: 14%; width: 38%; height: 34%; overflow: visible; }
+    .anno-arrow path { fill: none; stroke: var(--rec); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .anno-box { position: absolute; right: 8%; top: 12%; width: 30%; height: 30%; border: 2px solid var(--rec); border-radius: 4px; }
+    /* floating annotation toolbar */
+    .toolbar {
+      position: absolute; top: 12px; right: 12px; display: flex; align-items: center; gap: 4px;
+      padding: 6px; background: rgba(13,21,36,0.92); border: 1px solid var(--line);
+      border-radius: 11px; box-shadow: 0 14px 30px rgba(2,6,16,0.55);
+    }
+    .toolbar i { width: 30px; height: 30px; border-radius: 7px; display: grid; place-items: center; }
+    .toolbar i svg { width: 15px; height: 15px; stroke: var(--text-2); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .toolbar i.on { background: var(--btn-blue); }
+    .toolbar i.on svg { stroke: #fff; }
+    .toolbar .sep { width: 1px; height: 18px; background: var(--line); margin: 0 3px; }
+    .toolbar .swatch { width: 14px; height: 14px; border-radius: 50%; background: var(--rec); border: 2px solid #0B1322; box-shadow: 0 0 0 1.5px var(--rec); margin: 0 6px; }
     /* recording pill */
-    .rec-pill {
-      position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%);
-      display: flex; align-items: center; gap: 10px; padding: 8px 14px;
-      background: var(--ink); color: #fff; border-radius: 12px; box-shadow: 0 12px 30px rgba(11,20,38,.28);
+    .recpill {
+      position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 11px; padding: 9px 16px;
+      background: rgba(10,16,29,0.94); border: 1px solid var(--line); border-radius: 100px;
+      box-shadow: 0 16px 36px rgba(2,6,16,0.6);
     }
-    .rec-pill .rdot { width: 9px; height: 9px; border-radius: 50%; background: var(--rec); animation: blink 1.2s steps(1) infinite; }
-    .rec-pill .t { font-family: var(--mono); font-size: 12px; letter-spacing: .04em; }
-    .rec-pill .wave { display:flex; align-items:center; gap:2px; height:14px; }
-    .rec-pill .wave span { width:2px; background: var(--cyan); border-radius:2px; animation: eq 1s ease-in-out infinite; }
-    .rec-pill .wave span:nth-child(2){ animation-delay:.15s; } .rec-pill .wave span:nth-child(3){ animation-delay:.3s; }
-    .rec-pill .wave span:nth-child(4){ animation-delay:.45s; } .rec-pill .wave span:nth-child(5){ animation-delay:.6s; }
-    /* floating tool chip */
-    .chip {
-      position:absolute; top: 14px; right: 14px; display:flex; gap:4px; padding:6px;
-      background: rgba(255,255,255,0.92); border:1px solid var(--line); border-radius: 11px;
-      box-shadow: var(--shadow-md); backdrop-filter: blur(8px);
+    .recpill .rdot { width: 9px; height: 9px; border-radius: 50%; background: var(--rec); }
+    @media (prefers-reduced-motion: no-preference) {
+      .recpill .rdot { animation: blink 1.25s steps(1) infinite; }
+      @keyframes blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0.25; } }
     }
-    .chip b { width:30px; height:30px; border-radius:8px; display:grid; place-items:center; }
-    .chip b svg { width:16px; height:16px; stroke:#5A6B86; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-    .chip b.on { background: var(--grad); } .chip b.on svg { stroke:#fff; }
+    .recpill .t { font-family: var(--mono); font-size: 12px; letter-spacing: 0.07em; color: var(--text); }
+    .recpill .wave { display: flex; align-items: center; gap: 2.5px; height: 14px; }
+    .recpill .wave span { width: 2.5px; border-radius: 2px; background: var(--cyan); height: 6px; }
+    .recpill .wave span:nth-child(2) { height: 11px; } .recpill .wave span:nth-child(3) { height: 8px; }
+    .recpill .wave span:nth-child(4) { height: 13px; } .recpill .wave span:nth-child(5) { height: 7px; }
+    @media (prefers-reduced-motion: no-preference) {
+      .recpill .wave span { height: 14px; transform-origin: center; animation: eq 1.05s ease-in-out infinite; }
+      .recpill .wave span:nth-child(2) { animation-delay: .14s; } .recpill .wave span:nth-child(3) { animation-delay: .28s; }
+      .recpill .wave span:nth-child(4) { animation-delay: .42s; } .recpill .wave span:nth-child(5) { animation-delay: .56s; }
+      @keyframes eq { 0%, 100% { transform: scaleY(0.36); } 50% { transform: scaleY(1); } }
+    }
 
-    @keyframes ping { 0%{ box-shadow:0 0 0 0 rgba(7,191,214,.5);} 70%{ box-shadow:0 0 0 7px rgba(7,191,214,0);} 100%{ box-shadow:0 0 0 0 rgba(7,191,214,0);} }
-    @keyframes breathe { 0%,100%{ border-color: var(--blue);} 50%{ border-color: var(--cyan);} }
-    @keyframes blink { 0%,50%{ opacity:1;} 51%,100%{ opacity:.25;} }
-    @keyframes eq { 0%,100%{ height:5px;} 50%{ height:14px;} }
-    @keyframes floaty { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-10px);} }
-    @keyframes rise { from{ opacity:0; transform: translateY(24px);} to{ opacity:1; transform:none;} }
-
-    /* ── FEATURE / CARD GRIDS ── */
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    /* ── Feature cards ── */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .card {
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--r);
-      padding: 32px 28px; box-shadow: var(--shadow-sm); transition: transform .35s cubic-bezier(.2,.9,.3,1), box-shadow .35s, border-color .35s;
+      position: relative; background: var(--card); border: 1px solid var(--line-soft);
+      border-radius: var(--r); padding: 30px 26px;
+      transition: border-color .25s ease-out, transform .25s ease-out, background-color .25s ease-out;
     }
-    .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: #CFE0FF; }
-    .ic {
-      width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; margin-bottom: 18px;
-      background: linear-gradient(135deg, rgba(45,107,255,0.12), rgba(7,191,214,0.12));
+    .card:hover { border-color: #27395B; transform: translateY(-3px); background: var(--card-2); }
+    .card .corner { position: absolute; width: 15px; height: 15px; opacity: 0; transition: opacity .25s ease-out; }
+    .card .corner svg { width: 100%; height: 100%; stroke: var(--cyan); stroke-width: 2; fill: none; }
+    .card .corner.tl { top: 9px; left: 9px; }
+    .card .corner.br { bottom: 9px; right: 9px; transform: rotate(180deg); }
+    .card:hover .corner { opacity: 1; }
+    .card .mode {
+      font-family: var(--mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.2em;
+      color: var(--mut); text-transform: uppercase; margin-bottom: 20px;
     }
-    .ic svg { width: 23px; height: 23px; stroke: var(--blue); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .card.feature h3 { font-family: var(--display); font-size: 19px; font-weight: 700; margin-bottom: 9px; letter-spacing:-0.01em; }
-    .card.feature p { font-size: 14.5px; color: var(--ink-soft); }
-    .card.lead { grid-column: span 1; background: linear-gradient(150deg, #0B1426, #16275a); border-color: transparent; color:#fff; }
-    .card.lead h3 { color:#fff; } .card.lead p { color: #B7C5E0; }
-    .card.lead .ic { background: rgba(255,255,255,0.10); } .card.lead .ic svg { stroke: #fff; }
+    .card .ic {
+      width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 16px;
+      background: linear-gradient(135deg, rgba(61,120,255,0.14), rgba(25,211,230,0.10));
+      border: 1px solid rgba(61,120,255,0.22);
+    }
+    .card .ic svg { width: 21px; height: 21px; stroke: var(--cyan); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .card h3 { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: -0.01em; margin-bottom: 8px; }
+    .card p { font-size: 15px; color: var(--text-2); }
+    .card.lead { grid-column: span 3; display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center;
+      background: linear-gradient(135deg, rgba(61,120,255,0.10), rgba(25,211,230,0.05)), var(--card);
+      border-color: rgba(61,120,255,0.30);
+    }
+    .card.lead .ic { width: 54px; height: 54px; margin: 0; }
+    .card.lead .ic svg { stroke: var(--rec); }
+    .card.lead h3 { font-size: 24px; }
+    .card.lead p { max-width: 70ch; }
+    .card.wide { grid-column: span 2; }
+    .card.wide p { max-width: 58ch; }
 
-    /* ── STEPS ── */
-    .steps { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; margin-top: 58px; }
-    .step { position: relative; text-align: center; }
+    /* ── Steps ── */
+    .band { background: var(--bg-2); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 54px; counter-reset: step; }
+    .step {
+      position: relative; background: var(--card); border: 1px solid var(--line-soft);
+      border-radius: var(--r); padding: 30px 26px;
+    }
     .step .n {
-      width: 60px; height: 60px; border-radius: 17px; margin: 0 auto 20px; display: grid; place-items: center;
-      font-family: var(--display); font-weight: 700; font-size: 22px; color: #fff; background: var(--grad);
-      box-shadow: 0 12px 28px rgba(45,107,255,0.30);
+      font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; color: var(--cyan);
+      margin-bottom: 16px; display: block;
     }
-    .step h3 { font-family: var(--display); font-size: 19px; font-weight: 700; margin-bottom: 9px; }
-    .step p { font-size: 15px; color: var(--ink-soft); }
-    .step p strong { color: var(--ink); font-family: var(--mono); font-weight: 600; font-size: 13px; background: var(--paper); padding: 1px 7px; border-radius: 6px; border:1px solid var(--line); }
-    .step:not(:last-child)::after { content:''; position:absolute; top:30px; right:-22px; width:44px; height:2px; background: linear-gradient(90deg, var(--blue), transparent); }
+    .step h3 { font-family: var(--display); font-weight: 600; font-size: 20px; margin-bottom: 8px; }
+    .step p { font-size: 15px; color: var(--text-2); }
+    kbd {
+      font-family: var(--mono); font-size: 12.5px; font-weight: 600; color: var(--text);
+      background: var(--card-2); border: 1px solid var(--line); border-bottom-width: 2px;
+      padding: 2.5px 8px; border-radius: 6px; white-space: nowrap;
+    }
 
-    /* ── SHORTCUTS ── */
-    .sc-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; max-width: 720px; margin: 56px auto 0; }
-    .sc { display:flex; align-items:center; gap: 16px; padding: 16px 20px; background: var(--surface); border:1px solid var(--line); border-radius: var(--r-sm); box-shadow: var(--shadow-sm); transition: border-color .25s, transform .25s; }
-    .sc:hover { border-color:#CFE0FF; transform: translateX(3px); }
-    .kbd { display:inline-flex; gap:5px; min-width:130px; }
-    .kbd b { font-family: var(--mono); font-size:12px; font-weight:600; color: var(--ink); background: var(--paper-2); border:1px solid var(--line); border-bottom-width:2px; padding: 4px 9px; border-radius:7px; }
-    .sc span { font-size: 14.5px; color: var(--ink-soft); }
+    /* ── Shortcuts ── */
+    .sc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-width: 760px; margin: 54px auto 0; }
+    .sc {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 15px 20px; min-height: 56px; background: var(--card); border: 1px solid var(--line-soft);
+      border-radius: var(--r-sm); transition: border-color .2s ease-out;
+    }
+    .sc:hover { border-color: #27395B; }
+    .sc span { font-size: 15px; color: var(--text-2); }
+    .sc .keys { display: inline-flex; gap: 5px; flex: none; }
 
-    /* ── WHAT'S NEW ── */
-    .new { background: linear-gradient(180deg, rgba(45,107,255,0.05), transparent 40%); }
-    .new-grid { max-width: 920px; margin: 56px auto 0; display:grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+    /* ── Privacy band ── */
+    .priv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 54px; }
+    .priv {
+      display: flex; align-items: center; gap: 14px; padding: 18px 20px;
+      background: var(--card); border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+    }
+    .priv .pi {
+      width: 38px; height: 38px; flex: none; border-radius: 10px; display: grid; place-items: center;
+      background: rgba(25,211,230,0.08); border: 1px solid rgba(25,211,230,0.22);
+    }
+    .priv .pi svg { width: 18px; height: 18px; stroke: var(--cyan); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .priv span { font-size: 15px; font-weight: 500; color: var(--text); }
+    .priv-note { text-align: center; margin-top: 26px; font-size: 15px; color: var(--mut); }
+    .priv-note a { color: var(--cyan); text-decoration: none; }
+    .priv-note a:hover { text-decoration: underline; }
 
-    /* ── DOWNLOAD ── */
-    .dl-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 22px; max-width: 1000px; margin: 58px auto 0; }
-    .dl { text-align:center; background: var(--surface); border:1px solid var(--line); border-radius: var(--r); padding: 38px 28px; box-shadow: var(--shadow-sm); transition: transform .35s, box-shadow .35s, border-color .35s; }
-    .dl:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color:#CFE0FF; }
-    .dl .os { width: 50px; height: 50px; margin: 0 auto 16px; }
-    .dl .os svg { width:100%; height:100%; }
-    .dl h3 { font-family: var(--display); font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-    .dl .ver { font-size: 13px; color: var(--ink-soft); }
-    .dl .size { font-size: 12px; color: var(--muted); margin-bottom: 18px; }
-    .tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:4px 11px; border-radius:100px; margin-bottom:18px; }
-    .tag.sign { color:#16A34A; background: rgba(22,163,74,.10); border:1px solid rgba(22,163,74,.22); }
-    .tag.soon { color: var(--blue-deep); background: rgba(45,107,255,.09); border:1px solid rgba(45,107,255,.20); }
-    .dl .btn { width:100%; justify-content:center; }
-    .dl.soon { opacity: .92; }
-    .dl.soon .btn { background: var(--paper-2); color: var(--muted); border:1px solid var(--line); cursor: default; pointer-events:none; box-shadow:none; }
+    /* ── Download ── */
+    .dl-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; max-width: 920px; margin: 54px auto 0; }
+    .dl {
+      position: relative; background: var(--card); border: 1px solid var(--line-soft);
+      border-radius: var(--r); padding: 34px 30px; display: flex; flex-direction: column; gap: 0;
+    }
+    .dl.primary { border-color: rgba(61,120,255,0.38); background: linear-gradient(160deg, rgba(61,120,255,0.09), transparent 55%), var(--card); }
+    .dl .tag {
+      position: absolute; top: 18px; right: 18px;
+      font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; padding: 5px 11px; border-radius: 100px;
+    }
+    .dl .tag.rec { color: #06121C; background: var(--cyan); }
+    .dl .tag.alt { color: var(--mut); border: 1px solid var(--line); }
+    .dl h3 { font-family: var(--display); font-weight: 600; font-size: 23px; margin-bottom: 6px; }
+    .dl .meta { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: var(--mut); margin-bottom: 14px; }
+    .dl p { font-size: 15px; color: var(--text-2); margin-bottom: 24px; max-width: 44ch; }
+    .dl .act { margin-top: auto; }
+    .dl .after { margin-top: 14px; font-size: 13px; color: var(--mut); }
+    .dl .after a { color: var(--cyan); text-decoration: none; }
+    .dl .after a:hover { text-decoration: underline; }
+    .sysreq { text-align: center; margin-top: 28px; font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.05em; color: var(--mut); }
 
-    /* ── TRUST ── */
-    .trust .row { display:flex; justify-content:center; gap: 46px; flex-wrap:wrap; margin-top: 44px; }
-    .tb { display:flex; flex-direction:column; align-items:center; gap: 12px; max-width: 150px; }
-    .tb .bi { width: 52px; height:52px; border-radius:15px; display:grid; place-items:center; background: var(--surface); border:1px solid var(--line); box-shadow: var(--shadow-sm); }
-    .tb .bi svg { width:23px; height:23px; stroke: var(--blue); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-    .tb span { font-size: 13.5px; color: var(--ink-soft); }
+    /* ── FAQ ── */
+    .faq { max-width: 760px; margin: 48px auto 0; }
+    .faq details { border-bottom: 1px solid var(--line-soft); }
+    .faq summary {
+      list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      gap: 18px; padding: 22px 6px; min-height: 56px;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary h3 { font-family: var(--display); font-weight: 600; font-size: 19px; letter-spacing: -0.005em; }
+    .faq summary .chev { flex: none; width: 22px; height: 22px; transition: transform .2s ease-out; }
+    .faq summary .chev svg { width: 100%; height: 100%; stroke: var(--mut); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .faq details[open] summary .chev { transform: rotate(180deg); }
+    .faq .a { padding: 0 6px 24px; font-size: 16px; color: var(--text-2); max-width: 68ch; }
 
-    /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--line); padding: 50px 0; text-align:center; background: var(--surface); }
-    .foot-brand { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom: 16px; }
-    .foot-brand .logo { width: 26px; height:26px; }
-    .foot-brand b { font-family: var(--display); font-weight:700; font-size: 17px; }
-    .foot-txt { font-size: 13.5px; color: var(--muted); line-height: 1.9; }
-    .foot-txt strong { color: var(--ink-soft); }
-    .foot-txt a { color: var(--blue); text-decoration: none; } .foot-txt a:hover { text-decoration: underline; }
+    /* ── Footer ── */
+    footer { border-top: 1px solid var(--line-soft); padding: 54px 0 46px; background: var(--bg-2); position: relative; z-index: 1; }
+    .foot-top { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 30px; }
+    .foot-links { display: flex; gap: 4px; flex-wrap: wrap; list-style: none; }
+    .foot-links a {
+      display: inline-block; padding: 10px 14px; font-size: 14.5px; color: var(--text-2);
+      text-decoration: none; border-radius: 8px; transition: color .15s ease-out, background-color .15s ease-out;
+    }
+    .foot-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .foot-legal { font-size: 13.5px; color: var(--mut); line-height: 1.9; max-width: 72ch; }
+    .foot-legal strong { color: var(--text-2); font-weight: 600; }
 
-    /* ── reveal ── */
-    .reveal { opacity:0; transform: translateY(34px); transition: all .8s cubic-bezier(.16,1,.3,1); }
-    .reveal.in { opacity:1; transform:none; }
-    .stagger > .reveal:nth-child(2){ transition-delay:.07s; }
-    .stagger > .reveal:nth-child(3){ transition-delay:.14s; }
-    .stagger > .reveal:nth-child(4){ transition-delay:.21s; }
-    .stagger > .reveal:nth-child(5){ transition-delay:.28s; }
-    .stagger > .reveal:nth-child(6){ transition-delay:.35s; }
+    /* ── Scroll reveal (progressive enhancement; visible without JS) ── */
+    @media (prefers-reduced-motion: no-preference) {
+      .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s cubic-bezier(.2,.7,.3,1), transform .55s cubic-bezier(.2,.7,.3,1); }
+      .js .reveal.in { opacity: 1; transform: none; }
+      .js .stagger > .reveal:nth-child(2) { transition-delay: .06s; }
+      .js .stagger > .reveal:nth-child(3) { transition-delay: .12s; }
+      .js .stagger > .reveal:nth-child(4) { transition-delay: .18s; }
+      .js .stagger > .reveal:nth-child(5) { transition-delay: .24s; }
+      .js .stagger > .reveal:nth-child(6) { transition-delay: .30s; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important; animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
 
-    @media (max-width: 900px) {
-      .hero .container { grid-template-columns: 1fr; gap: 40px; }
-      .hero { padding-top: 130px; text-align:center; }
-      .hero p { margin-inline:auto; } .hero-actions, .hero-stats { justify-content:center; }
-      .grid-3, .new-grid, .dl-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; gap: 34px; } .step:not(:last-child)::after { display:none; }
-      .sc-grid { grid-template-columns: 1fr; }
-      .nav-links li:not(:last-child) { display:none; }
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero { padding-top: 140px; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .card.lead { grid-column: span 2; grid-template-columns: 1fr; }
+      .card.wide { grid-column: span 2; }
+      .steps-grid, .priv-grid { grid-template-columns: 1fr 1fr; }
+      .dl-grid { grid-template-columns: 1fr; max-width: 560px; }
+    }
+    @media (max-width: 640px) {
+      main section { padding: 84px 0; }
+      .container { padding: 0 22px; }
+      .hero { padding-top: 124px; text-align: left; }
+      .grid-3, .steps-grid, .priv-grid, .sc-grid { grid-template-columns: 1fr; }
+      .card.lead, .card.wide { grid-column: span 1; }
+      .nav-links li.hide-m { display: none; }
+      .hero-actions .btn-store, .hero-actions .btn { width: 100%; }
+      .shot .glow { inset: -6% 0; }
     }
   </style>
+  <script>document.documentElement.classList.add('js');</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SuperShot",
+    "alternateName": "SuperShotAI",
+    "operatingSystem": "Windows 10, Windows 11",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "SuperShot is a fast, native screenshot and screen recording app for Windows 10 and 11. Region, full-screen, scrolling and timed capture with annotation, plus region recording to MP4 with microphone audio. No telemetry, no ads.",
+    "url": "https://supershotapp.com/",
+    "image": "https://supershotapp.com/assets/og.png",
+    "softwareVersion": "2.0.0",
+    "downloadUrl": "https://apps.microsoft.com/detail/9PMD0JVXMS6T",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "GBP" },
+    "author": { "@type": "Organization", "name": "TS Robotics" },
+    "publisher": { "@type": "Organization", "name": "Mortgage Magick Limited" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is SuperShot free?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. SuperShot is free to download from the Microsoft Store, with no subscription, no watermarks and no account." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which versions of Windows does SuperShot support?",
+        "acceptedAnswer": { "@type": "Answer", "text": "SuperShot runs on Windows 10 and Windows 11 (64-bit). It is a native build designed to stay fast on modest hardware." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does SuperShot upload my screenshots or recordings?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. Captures and recordings are saved on your device and stay there. SuperShot has no telemetry, no analytics and no advertising." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can SuperShot record my screen with audio?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Select any region of the screen and record it straight to MP4 with microphone audio. A countdown leads in, a live timer runs while you record, and one key stops it." }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a Mac or mobile version of SuperShot?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. SuperShot is built for Windows only." }
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
-  <div class="bg"></div>
-  <div class="bg-grid"></div>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
 
-  <!-- Logo sprite: capture frame + lens/record dot -->
+  <!-- Logo sprite: capture frame + lens dot, matches the app icon -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="ssg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#2D6BFF"/><stop offset="0.55" stop-color="#1FA8E0"/><stop offset="1" stop-color="#07CCDA"/>
+        <stop offset="0" stop-color="#3D78FF"/><stop offset="0.55" stop-color="#1FA8E0"/><stop offset="1" stop-color="#19D3E6"/>
       </linearGradient>
       <symbol id="ss" viewBox="0 0 48 48">
         <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#ssg)"/>
@@ -310,259 +555,316 @@
         <circle cx="24" cy="24" r="7.6" fill="none" stroke="#fff" stroke-width="2.4"/>
         <circle cx="24" cy="24" r="3.1" fill="#fff"/>
       </symbol>
+      <symbol id="ms" viewBox="0 0 24 24">
+        <rect x="2" y="2" width="9.6" height="9.6" fill="#F25022"/>
+        <rect x="12.4" y="2" width="9.6" height="9.6" fill="#7FBA00"/>
+        <rect x="2" y="12.4" width="9.6" height="9.6" fill="#00A4EF"/>
+        <rect x="12.4" y="12.4" width="9.6" height="9.6" fill="#FFB900"/>
+      </symbol>
     </defs>
   </svg>
 
-  <!-- ── NAV ── -->
-  <nav id="nav">
+  <header class="nav" id="nav">
     <div class="container">
-      <a href="#" class="brand"><svg class="logo"><use href="#ss"/></svg><b>SuperShot</b></a>
-      <ul class="nav-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#how">How it works</a></li>
-        <li><a href="#shortcuts">Shortcuts</a></li>
-        <li><a href="#download" class="btn btn-primary nav-cta">Download</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- ── HERO ── -->
-  <header class="hero">
-    <div class="container">
-      <div>
-        <span class="hero-badge"><span class="dot"></span>Version 2.0 — now with screen recording</span>
-        <h1>Capture, annotate &amp;<br><span class="grad">record</span> your screen.</h1>
-        <p>One app for pixel-perfect screenshots <strong>and</strong> built-in screen recording to MP4. One hotkey, no clutter, no subscriptions.</p>
-        <div class="hero-actions">
-          <a href="#download" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download for Windows
-          </a>
-          <a href="#features" class="btn btn-ghost">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
-            See what's new
-          </a>
-        </div>
-        <div class="hero-stats">
-          <div><div class="v accent">2-in-1</div><div class="l">Capture + Record</div></div>
-          <div><div class="v">MP4</div><div class="l">Screen recording</div></div>
-          <div><div class="v">&lt; 1s</div><div class="l">to first capture</div></div>
-          <div><div class="v">£0</div><div class="l">no subscription</div></div>
-        </div>
-      </div>
-
-      <!-- Hero graphic: light capture/record mockup -->
-      <div class="glass">
-        <div class="win-bar"><i></i><i></i><i></i><span class="url">supershot — region capture</span></div>
-        <div class="canvas">
-          <div class="blk" style="left:8%; top:10%; width:34%; height:9%;"></div>
-          <div class="blk" style="left:8%; top:24%; width:24%; height:7%; background:#E7EDF8;"></div>
-          <div class="blk" style="right:8%; top:12%; width:26%; height:46%; background:#E7EDF8;"></div>
-          <div class="blk" style="left:8%; bottom:10%; width:46%; height:8%; background:#E7EDF8;"></div>
-          <div class="chip">
-            <b><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></b>
-            <b class="on"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></b>
-            <b><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></b>
-          </div>
-          <div class="marquee">
-            <span class="handle tl"></span><span class="handle tr"></span><span class="handle bl"></span><span class="handle br"></span>
-            <div class="crosshair"></div>
-            <div class="dim">1920 × 1080</div>
-          </div>
-          <div class="rec-pill">
-            <span class="rdot"></span><span class="t">REC 00:12</span>
-            <span class="wave"><span></span><span></span><span></span><span></span><span></span></span>
-          </div>
-        </div>
-      </div>
+      <a href="/" class="brand"><svg class="logo" aria-hidden="true"><use href="#ss"/></svg><b>SuperShot</b></a>
+      <nav aria-label="Main">
+        <ul class="nav-links">
+          <li class="hide-m"><a href="#features">Features</a></li>
+          <li class="hide-m"><a href="#how">How it works</a></li>
+          <li class="hide-m"><a href="#faq">FAQ</a></li>
+          <li><a href="#download" class="btn btn-primary">Download</a></li>
+        </ul>
+      </nav>
     </div>
   </header>
 
-  <!-- ── FEATURES ── -->
-  <section id="features">
-    <div class="container">
-      <div class="center reveal">
-        <div class="eyebrow">Features</div>
-        <h2 class="h-sec">Everything you need.<br>Nothing you don't.</h2>
-        <p class="sub">Built for speed and precision — no bloat, no cloud accounts, no subscriptions.</p>
-      </div>
+  <main id="main">
+    <!-- ── Hero ── -->
+    <section class="hero" aria-labelledby="hero-h">
+      <div class="container hero-grid">
+        <div>
+          <span class="hud-badge rise"><span class="dot"></span>New in 2.0 &middot; MP4 screen recording</span>
+          <h1 id="hero-h" class="rise d1">Capture anything.<br><span class="grad">Record any region.</span></h1>
+          <p class="lede rise d2">SuperShot is a fast, native screenshot and screen recording app for Windows. Grab a region, the full screen, a scrolling page or a timed shot, mark it up on the spot, and record straight to <strong>MP4 with your microphone</strong>.</p>
+          <div class="hero-actions rise d3">
+            <a class="btn-store" href="https://apps.microsoft.com/detail/9PMD0JVXMS6T">
+              <svg aria-hidden="true"><use href="#ms"/></svg>
+              <span class="t"><small>Get it from</small><strong>Microsoft Store</strong></span>
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/ts-robotic/supershot-windows/releases/download/v2.0.0/SuperShot_2.0.0_x64-setup.exe">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Direct download (.exe)
+            </a>
+          </div>
+          <p class="hero-meta rise d4">FREE &middot; WINDOWS 10 &amp; 11 (X64) &middot; EV CODE-SIGNED &middot; NO TELEMETRY</p>
+        </div>
 
-      <div class="grid-3 stagger" style="margin-top:56px;">
-        <div class="card feature lead reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-          <h3>Built-in Screen Recording</h3>
-          <p>Drag a box over any region and record it straight to MP4 — with your microphone. A 3-2-1 countdown, live timer, one-key stop. No screen-share prompts, no second app.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-          <h3>Instant Region Capture</h3>
-          <p>One hotkey triggers a pixel-perfect region selector with crosshair cursor and live dimension labels. Select exactly what you need.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
-          <h3>Live, Editable Annotation</h3>
-          <p>Pencil, line, arrow, rectangle, ellipse and text — with shapes that preview as you drag and text that stays editable and draggable until you save.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 6 12 14 20 6"/><polyline points="4 14 12 22 20 14"/></svg></div>
-          <h3>Scrolling Capture</h3>
-          <p>Capture long pages frame by frame — SuperShot detects the overlap and stitches them into one seamless, tall screenshot.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-          <h3>Multi-Monitor &amp; HiDPI</h3>
-          <p>Records the region wherever it sits, on any display, at native resolution. Full DPI scaling support for sharp HiDPI screens.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <h3>Private &amp; Verified</h3>
-          <p>No cloud, no accounts, no telemetry — your captures stay on your machine. EV code-signed by Mortgage Magick Ltd for verified trust.</p>
+        <div class="shot rise d2" role="img" aria-label="Illustration of SuperShot capturing a screen region, with annotation tools, a live dimension readout and a recording timer with microphone levels.">
+          <div class="glow"></div>
+          <div class="winframe">
+            <div class="winbar">
+              <svg class="wlogo" aria-hidden="true"><use href="#ss"/></svg>
+              <span class="wtitle">supershot &middot; region capture</span>
+              <span class="wbtns" aria-hidden="true">
+                <span><svg viewBox="0 0 10 10"><line x1="1" y1="5" x2="9" y2="5"/></svg></span>
+                <span><svg viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" rx="1"/></svg></span>
+                <span><svg viewBox="0 0 10 10"><path d="M1.5 1.5 L8.5 8.5 M8.5 1.5 L1.5 8.5"/></svg></span>
+              </span>
+            </div>
+            <div class="canvas">
+              <span class="blk" style="left:6%; top:8%; width:30%; height:7%;"></span>
+              <span class="blk b2" style="left:6%; top:20%; width:22%; height:5%;"></span>
+              <span class="blk b2" style="left:6%; top:30%; width:26%; height:5%;"></span>
+              <span class="blk b2" style="right:6%; top:8%; width:20%; height:40%;"></span>
+              <span class="blk b2" style="left:6%; bottom:8%; width:40%; height:6%;"></span>
+              <span class="blk" style="left:20%; top:24%; width:38%; height:34%;"></span>
+              <div class="toolbar" aria-hidden="true">
+                <i><svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></i>
+                <i class="on"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></i>
+                <i><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></i>
+                <i><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></i>
+                <span class="sep"></span>
+                <span class="swatch"></span>
+              </div>
+              <div class="marquee">
+                <svg class="ants" aria-hidden="true"><rect/></svg>
+                <span class="handle tl"></span><span class="handle tr"></span><span class="handle bl"></span><span class="handle br"></span>
+                <svg class="anno-arrow" viewBox="0 0 100 60" aria-hidden="true"><path d="M6 52 C 30 50, 58 40, 80 16 M68 16 L81 14 L80 28"/></svg>
+                <span class="anno-box" aria-hidden="true"></span>
+                <span class="dimtag">1280 &times; 720</span>
+              </div>
+              <div class="recpill" aria-hidden="true">
+                <span class="rdot"></span><span class="t">REC 00:12</span>
+                <span class="wave"><span></span><span></span><span></span><span></span><span></span></span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── HOW IT WORKS ── -->
-  <section id="how" class="steps">
-    <div class="container">
-      <div class="center reveal">
-        <div class="eyebrow">How it works</div>
-        <h2 class="h-sec">Three steps. Under a second.</h2>
-      </div>
-      <div class="steps-grid">
-        <div class="step reveal"><div class="n">1</div><h3>Press the hotkey</h3><p>Hit <strong>Ctrl+Shift+S</strong>, or open the recorder from the app. The screen freezes and a crosshair appears instantly.</p></div>
-        <div class="step reveal"><div class="n">2</div><h3>Select &amp; mark up</h3><p>Drag to select a region. Annotation tools appear automatically — or start recording the same selection to MP4.</p></div>
-        <div class="step reveal"><div class="n">3</div><h3>Copy, save or record</h3><p>One click to copy, save or pin a screenshot — or press <strong>Esc</strong> to finish a recording. Done.</p></div>
-      </div>
-    </div>
-  </section>
+    <!-- ── Features ── -->
+    <section id="features" aria-labelledby="features-h">
+      <div class="container">
+        <div class="center reveal">
+          <p class="eyebrow">Capture modes</p>
+          <h2 id="features-h" class="h-sec">Four ways to capture.<br>One key to record.</h2>
+          <p class="sub">Region, full screen, scrolling and timed capture, live annotation, and region recording to MP4. All of it in one lightweight, native app.</p>
+        </div>
 
-  <!-- ── SHORTCUTS ── -->
-  <section id="shortcuts">
-    <div class="container">
-      <div class="center reveal">
-        <div class="eyebrow">Keyboard shortcuts</div>
-        <h2 class="h-sec">Speed is everything.</h2>
-        <p class="sub">Every action has a shortcut, and you can remap them all. Your hands never leave the keyboard.</p>
+        <div class="grid-3 stagger" style="margin-top:54px;">
+          <article class="card lead reveal">
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.6" fill="currentColor" stroke="none" style="fill:#FF5C5C"/></svg></div>
+            <div>
+              <p class="mode">Record &middot; MP4 + mic</p>
+              <h3>Region recording to MP4</h3>
+              <p>Draw a box over any part of the screen and record it straight to MP4 with microphone audio. A short countdown leads in, a live timer keeps you honest, and one key stops and saves. No screen-share prompts, no second app.</p>
+            </div>
+          </article>
+          <article class="card reveal">
+            <span class="corner tl"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <span class="corner br"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <p class="mode">Region</p>
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3H5a2 2 0 00-2 2v2M17 3h2a2 2 0 012 2v2M7 21H5a2 2 0 01-2-2v-2M17 21h2a2 2 0 002-2v-2"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg></div>
+            <h3>Region capture</h3>
+            <p>One hotkey, a crosshair and live dimension labels. Drag across exactly the pixels you need and release.</p>
+          </article>
+          <article class="card reveal">
+            <span class="corner tl"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <span class="corner br"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <p class="mode">Full screen</p>
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+            <h3>Full-screen capture</h3>
+            <p>The whole display in one keystroke, at native resolution on every monitor, with full HiDPI scaling support.</p>
+          </article>
+          <article class="card reveal">
+            <span class="corner tl"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <span class="corner br"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <p class="mode">Scrolling</p>
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 6 12 14 20 6"/><polyline points="4 13 12 21 20 13"/></svg></div>
+            <h3>Scrolling capture</h3>
+            <p>Capture long pages frame by frame. SuperShot detects the overlap and stitches one tall, continuous image.</p>
+          </article>
+          <article class="card reveal">
+            <span class="corner tl"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <span class="corner br"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <p class="mode">Timed</p>
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><line x1="12" y1="13" x2="12" y2="9"/><line x1="10" y1="2" x2="14" y2="2"/></svg></div>
+            <h3>Timed capture</h3>
+            <p>Set a short delay, open the menu or tooltip you could never screenshot, and SuperShot fires the capture for you.</p>
+          </article>
+          <article class="card wide reveal">
+            <span class="corner tl"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <span class="corner br"><svg viewBox="0 0 15 15" aria-hidden="true"><path d="M1 6 V1 H6"/></svg></span>
+            <p class="mode">Annotate</p>
+            <div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg></div>
+            <h3>Annotation that stays editable</h3>
+            <p>Pencil, line, arrow, rectangle, ellipse and text. Shapes preview as you drag, and text stays editable and draggable until you save.</p>
+          </article>
+        </div>
       </div>
-      <div class="sc-grid stagger">
-        <div class="sc reveal"><span class="kbd"><b>Ctrl</b><b>Shift</b><b>S</b></span><span>Region capture</span></div>
-        <div class="sc reveal"><span class="kbd"><b>Ctrl</b><b>Shift</b><b>F</b></span><span>Full screen capture</span></div>
-        <div class="sc reveal"><span class="kbd"><b>Ctrl</b><b>Shift</b><b>R</b></span><span>Scrolling capture</span></div>
-        <div class="sc reveal"><span class="kbd"><b>Ctrl</b><b>Shift</b><b>T</b></span><span>Timed capture</span></div>
-        <div class="sc reveal"><span class="kbd"><b>Esc</b></span><span>Stop recording / cancel</span></div>
-        <div class="sc reveal"><span class="kbd"><b>F10</b></span><span>Discard recording</span></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── WHAT'S NEW ── -->
-  <section class="new">
-    <div class="container">
-      <div class="center reveal">
-        <div class="eyebrow">Release notes</div>
-        <h2 class="h-sec">What's new in v2.0</h2>
-        <p class="sub">The biggest release yet — screenshots and screen recording, together in one app.</p>
-      </div>
-      <div class="new-grid stagger">
-        <div class="card feature reveal">
-          <div class="ic" style="background:linear-gradient(135deg,rgba(255,77,77,.14),rgba(255,149,0,.10));"><svg viewBox="0 0 24 24" stroke="#FF4D4D"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.4" fill="#FF4D4D" stroke="none"/></svg></div>
-          <h3>Screen Recording to MP4</h3>
-          <p>The headline of v2: record any region straight to MP4 with microphone audio — countdown, live timer, one-key stop, no screen-share prompts.</p>
+    <!-- ── How it works ── -->
+    <section id="how" class="band" aria-labelledby="how-h">
+      <div class="container">
+        <div class="center reveal">
+          <p class="eyebrow">How it works</p>
+          <h2 id="how-h" class="h-sec">From hotkey to saved shot in seconds.</h2>
         </div>
-        <div class="card feature reveal">
-          <div class="ic"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
-          <h3>Live, Editable Annotation</h3>
-          <p>Shapes preview as you drag, and text stays transparent, re-editable and draggable until you save. Retouch anything before exporting.</p>
+        <div class="steps-grid stagger">
+          <div class="step reveal">
+            <span class="n">STEP 01</span>
+            <h3>Press the hotkey</h3>
+            <p>Hit <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>S</kbd> anywhere in Windows. The screen freezes and a crosshair appears instantly.</p>
+          </div>
+          <div class="step reveal">
+            <span class="n">STEP 02</span>
+            <h3>Drag the region</h3>
+            <p>Select exactly what you need, guided by live dimension labels. Annotation tools appear the moment you release.</p>
+          </div>
+          <div class="step reveal">
+            <span class="n">STEP 03</span>
+            <h3>Save, copy or record</h3>
+            <p>Copy, save or pin the shot, or record the same selection to MP4 and press <kbd>Esc</kbd> when you are done.</p>
+          </div>
         </div>
-        <div class="card feature reveal">
-          <div class="ic" style="background:linear-gradient(135deg,rgba(45,107,255,.14),rgba(7,191,214,.10));"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></div>
-          <h3>Rebuilt &amp; Faster</h3>
-          <p>A ground-up rebuild on a native Rust core — lighter, quicker to launch, single-instance, and EV code-signed for verified trust.</p>
-        </div>
-        <div class="card feature reveal">
-          <div class="ic" style="background:linear-gradient(135deg,rgba(45,107,255,.14),rgba(7,191,214,.10));"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
-          <h3>iOS — coming soon</h3>
-          <p>SuperShot is coming to iPhone and iPad. A native iOS build is in development — capture and mark up on the go.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ── DOWNLOAD ── -->
-  <section id="download">
-    <div class="container">
-      <div class="center reveal">
-        <div class="eyebrow">Download</div>
-        <h2 class="h-sec">Get SuperShot. Free.</h2>
-        <p class="sub">No trial, no watermarks, no subscriptions. Just install and capture.</p>
+        <div class="sc-grid stagger" id="shortcuts">
+          <div class="sc reveal"><span>Region capture</span><span class="keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>S</kbd></span></div>
+          <div class="sc reveal"><span>Full-screen capture</span><span class="keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>F</kbd></span></div>
+          <div class="sc reveal"><span>Scrolling capture</span><span class="keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>R</kbd></span></div>
+          <div class="sc reveal"><span>Timed capture</span><span class="keys"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>T</kbd></span></div>
+          <div class="sc reveal"><span>Stop recording or cancel</span><span class="keys"><kbd>Esc</kbd></span></div>
+          <div class="sc reveal"><span>Discard recording</span><span class="keys"><kbd>F10</kbd></span></div>
+        </div>
+        <p class="priv-note reveal">Every shortcut can be remapped in Settings.</p>
       </div>
-      <div class="dl-grid stagger">
-        <div class="dl reveal">
-          <div class="os"><svg viewBox="0 0 24 24" fill="var(--blue)"><path d="M3 12V6.75l7-1.25V12H3zm8-1.5V4.5L21 3v9h-10zm-8 3h7v6.5L3 18.75V13.5zm8 0h10v9l-10-1.5V13.5z"/></svg></div>
-          <h3>Windows</h3>
-          <div class="ver">v2.0.0 · Windows 10+</div>
-          <div class="size">~48 MB · x64 installer</div>
-          <div class="tag sign"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>EV Code Signed</div>
-          <a href="https://github.com/ts-robotic/supershot-windows/releases/download/v2.0.0/SuperShot_2.0.0_x64-setup.exe" class="btn btn-primary">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download
-          </a>
-        </div>
-        <div class="dl soon reveal">
-          <div class="os"><svg viewBox="0 0 24 24" fill="var(--blue)"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg></div>
-          <h3>macOS</h3>
-          <div class="ver">Universal · macOS 12+</div>
-          <div class="size">Apple Silicon + Intel</div>
-          <div class="tag soon">Coming soon</div>
-          <a class="btn">Coming soon</a>
-        </div>
-        <div class="dl soon reveal">
-          <div class="os"><svg viewBox="0 0 24 24" fill="var(--blue)"><path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 21.99 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.1 21.99C7.79 22.03 6.8 20.68 5.96 19.47C4.25 16.97 2.94 12.45 4.7 9.39C5.57 7.87 7.13 6.91 8.82 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/></svg></div>
-          <h3>iOS</h3>
-          <div class="ver">iPhone &amp; iPad</div>
-          <div class="size">Native app</div>
-          <div class="tag soon">Coming soon</div>
-          <a class="btn">Coming soon</a>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── TRUST ── -->
-  <section class="trust center">
-    <div class="container reveal">
-      <div class="eyebrow">Trusted &amp; verified</div>
-      <h2 class="h-sec">Built with integrity.</h2>
-      <div class="row">
-        <div class="tb"><div class="bi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span>EV code-signed certificate</span></div>
-        <div class="tb"><div class="bi"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div><span>Windows SmartScreen trusted</span></div>
-        <div class="tb"><div class="bi"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><span>No cloud. No telemetry.</span></div>
-        <div class="tb"><div class="bi"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span>Developed by TS Robotics</span></div>
+    <!-- ── Privacy ── -->
+    <section id="privacy" aria-labelledby="privacy-h">
+      <div class="container">
+        <div class="center reveal">
+          <p class="eyebrow">Private by design</p>
+          <h2 id="privacy-h" class="h-sec">Your screen is your business.</h2>
+          <p class="sub">SuperShot is a native Windows build that keeps everything on your machine. Nothing is uploaded, tracked or sold.</p>
+        </div>
+        <div class="priv-grid stagger">
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><span>No telemetry, no analytics</span></div>
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="5.6" y1="5.6" x2="18.4" y2="18.4"/></svg></span><span>No ads, no bundled extras</span></div>
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span><span>Captures stay on your device</span></div>
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg></span><span>No account, no sign-up</span></div>
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span><span>EV code-signed installer</span></div>
+          <div class="priv reveal"><span class="pi"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span><span>Native build, light on resources</span></div>
+        </div>
+        <p class="priv-note reveal">The microphone is used only while you record, and only if you turn it on. Read the <a href="/privacy/">privacy policy</a>.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── FOOTER ── -->
+    <!-- ── Download ── -->
+    <section id="download" class="band" aria-labelledby="download-h">
+      <div class="container">
+        <div class="center reveal">
+          <p class="eyebrow">Download</p>
+          <h2 id="download-h" class="h-sec">Get SuperShot for Windows.</h2>
+          <p class="sub">Free, with no trial and no watermarks. The Microsoft Store build keeps itself up to date; the direct installer is there as a backup.</p>
+        </div>
+        <div class="dl-grid stagger">
+          <div class="dl primary reveal">
+            <span class="tag rec">Recommended</span>
+            <h3>Microsoft Store</h3>
+            <p class="meta">PUBLISHED AS SUPERSHOTAI &middot; AUTO-UPDATES</p>
+            <p>One-click install from the Store, updated automatically in the background.</p>
+            <div class="act">
+              <a class="btn-store big" href="https://apps.microsoft.com/detail/9PMD0JVXMS6T">
+                <svg aria-hidden="true"><use href="#ms"/></svg>
+                <span class="t"><small>Get it from</small><strong>Microsoft Store</strong></span>
+              </a>
+            </div>
+            <p class="after">Already on Windows? <a href="ms-windows-store://pdp/?productid=9PMD0JVXMS6T">Open the listing in the Store app</a>.</p>
+          </div>
+          <div class="dl reveal">
+            <span class="tag alt">Backup</span>
+            <h3>Direct download</h3>
+            <p class="meta">V2.0.0 &middot; X64 INSTALLER &middot; 47.6 MB</p>
+            <p>The same app as a standalone installer, EV code-signed by Mortgage Magick Limited.</p>
+            <div class="act">
+              <a class="btn btn-primary" href="https://github.com/ts-robotic/supershot-windows/releases/download/v2.0.0/SuperShot_2.0.0_x64-setup.exe">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download the .exe
+              </a>
+            </div>
+            <p class="after">Served from the official <a href="https://github.com/ts-robotic/supershot-windows/releases">GitHub release</a>.</p>
+          </div>
+        </div>
+        <p class="sysreq reveal">SYSTEM REQUIREMENTS: WINDOWS 10 OR WINDOWS 11, 64-BIT</p>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section id="faq" aria-labelledby="faq-h">
+      <div class="container">
+        <div class="center reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2 id="faq-h" class="h-sec">Questions, answered.</h2>
+        </div>
+        <div class="faq reveal">
+          <details>
+            <summary><h3>Is SuperShot free?</h3><span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></summary>
+            <p class="a">Yes. SuperShot is free to download from the Microsoft Store, with no subscription, no watermarks and no account.</p>
+          </details>
+          <details>
+            <summary><h3>Which versions of Windows does SuperShot support?</h3><span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></summary>
+            <p class="a">SuperShot runs on Windows 10 and Windows 11 (64-bit). It is a native build designed to stay fast on modest hardware.</p>
+          </details>
+          <details>
+            <summary><h3>Does SuperShot upload my screenshots or recordings?</h3><span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></summary>
+            <p class="a">No. Captures and recordings are saved on your device and stay there. SuperShot has no telemetry, no analytics and no advertising.</p>
+          </details>
+          <details>
+            <summary><h3>Can SuperShot record my screen with audio?</h3><span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></summary>
+            <p class="a">Yes. Select any region of the screen and record it straight to MP4 with microphone audio. A countdown leads in, a live timer runs while you record, and one key stops it.</p>
+          </details>
+          <details>
+            <summary><h3>Is there a Mac or mobile version of SuperShot?</h3><span class="chev"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span></summary>
+            <p class="a">No. SuperShot is built for Windows only.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <footer>
     <div class="container">
-      <div class="foot-brand"><svg class="logo"><use href="#ss"/></svg><b>SuperShot</b></div>
-      <div class="foot-txt">
-        Developed by <strong>TS Robotics</strong>. Solely licensed to <strong>Mortgage Magick Limited</strong>, trading as <strong>Mortgage Magic</strong>, for distribution.<br>
-        Copyright © 2026 Mortgage Magick Limited. All rights reserved.<br><br>
-        <a href="https://github.com/ts-robotic/supershot-windows/releases">Windows Releases</a> · <a href="privacy/">Privacy Policy</a> · macOS &amp; iOS coming soon
+      <div class="foot-top">
+        <a href="/" class="brand"><svg class="logo" style="width:28px;height:28px" aria-hidden="true"><use href="#ss"/></svg><b style="font-family:var(--display);font-weight:600;font-size:18px">SuperShot</b></a>
+        <ul class="foot-links">
+          <li><a href="https://apps.microsoft.com/detail/9PMD0JVXMS6T">Microsoft Store</a></li>
+          <li><a href="https://github.com/ts-robotic/supershot-windows/releases">Windows releases</a></li>
+          <li><a href="/privacy/">Privacy policy</a></li>
+        </ul>
       </div>
+      <p class="foot-legal">
+        Developed by <strong>TS Robotics</strong>. Solely licensed to <strong>Mortgage Magick Limited</strong>, trading as <strong>Mortgage Magic</strong>, for distribution. Published in the Microsoft Store as <strong>SuperShotAI</strong>.<br>
+        Copyright &copy; 2026 Mortgage Magick Limited. All rights reserved.
+      </p>
     </div>
   </footer>
 
   <script>
-    const nav = document.getElementById('nav');
-    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30));
-    const io = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-      const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    }));
+    var nav = document.getElementById('nav');
+    addEventListener('scroll', function () { nav.classList.toggle('scrolled', scrollY > 24); }, { passive: true });
+    var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var els = document.querySelectorAll('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('in'); });
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+      els.forEach(function (el) { io.observe(el); });
+    }
   </script>
 </body>
 </html>

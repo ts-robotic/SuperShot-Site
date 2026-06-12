@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+  Source template for /assets/og.png.
+  Render at exactly 1200 x 630 and screenshot the page to regenerate.
+-->
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <style>
+    @font-face {
+      font-family: 'Clash Display';
+      src: url('./fonts/ClashDisplay-Variable.woff2') format('woff2');
+      font-weight: 200 700; font-display: block;
+    }
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('./fonts/Satoshi-Variable.woff2') format('woff2');
+      font-weight: 300 900; font-display: block;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+      position: relative;
+      font-family: 'Satoshi', 'Segoe UI', sans-serif;
+      background: #060A13; color: #ECF1FA;
+      background-image:
+        radial-gradient(760px 480px at 82% -12%, rgba(61,120,255,0.20), transparent 64%),
+        radial-gradient(620px 420px at -6% 110%, rgba(25,211,230,0.12), transparent 60%),
+        linear-gradient(rgba(110,140,200,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(110,140,200,0.06) 1px, transparent 1px);
+      background-size: auto, auto, 44px 44px, 44px 44px;
+    }
+    .wrap { position: absolute; inset: 64px 72px; }
+    .frame {
+      position: absolute; inset: 0;
+      border: 2px dashed #19D3E6; border-radius: 6px; opacity: 0.85;
+    }
+    .frame i {
+      position: absolute; width: 16px; height: 16px; border-radius: 4px;
+      background: #0B1322; border: 2.4px solid #19D3E6;
+    }
+    .frame i:nth-child(1) { left: -9px; top: -9px; } .frame i:nth-child(2) { right: -9px; top: -9px; }
+    .frame i:nth-child(3) { left: -9px; bottom: -9px; } .frame i:nth-child(4) { right: -9px; bottom: -9px; }
+    .tag {
+      position: absolute; right: -2px; bottom: -46px;
+      font-family: Consolas, monospace; font-size: 19px; font-weight: 700; letter-spacing: 0.05em;
+      color: #06121C; background: #19D3E6; padding: 7px 14px; border-radius: 8px;
+    }
+    .inner { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 78px; }
+    .brandrow { display: flex; align-items: center; gap: 20px; margin-bottom: 38px; }
+    .brandrow svg { width: 76px; height: 76px; }
+    .brandrow b { font-family: 'Clash Display', sans-serif; font-weight: 600; font-size: 46px; letter-spacing: -0.01em; }
+    h1 {
+      font-family: 'Clash Display', sans-serif; font-weight: 600;
+      font-size: 86px; line-height: 1.0; letter-spacing: -0.022em; margin-bottom: 30px;
+    }
+    h1 .grad {
+      background: linear-gradient(120deg, #3D78FF, #19D3E6);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    p { font-size: 30px; color: #AEBBD1; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="frame"><i></i><i></i><i></i><i></i><span class="tag">1200 &times; 630</span></div>
+    <div class="inner">
+      <div class="brandrow">
+        <svg viewBox="0 0 48 48">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#3D78FF"/><stop offset="0.55" stop-color="#1FA8E0"/><stop offset="1" stop-color="#19D3E6"/>
+            </linearGradient>
+          </defs>
+          <rect x="3" y="3" width="42" height="42" rx="13" fill="url(#g)"/>
+          <path d="M16 11 H11 V16 M32 11 H37 V16 M16 37 H11 V32 M32 37 H37 V32" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="24" cy="24" r="7.6" fill="none" stroke="#fff" stroke-width="2.4"/>
+          <circle cx="24" cy="24" r="3.1" fill="#fff"/>
+        </svg>
+        <b>SuperShot</b>
+      </div>
+      <h1>Capture anything.<br><span class="grad">Record any region.</span></h1>
+      <p>Fast, native screenshots and screen recording for Windows.</p>
+    </div>
+  </div>
+</body>
+</html>

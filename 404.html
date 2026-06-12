@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | SuperShot</title>
+  <meta name="robots" content="noindex">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#060A13">
+  <link rel="icon" href="/icon-128.png" type="image/png">
+  <style>
+    @font-face {
+      font-family: 'Clash Display';
+      src: url('/assets/fonts/ClashDisplay-Variable.woff2') format('woff2');
+      font-weight: 200 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Satoshi';
+      src: url('/assets/fonts/Satoshi-Variable.woff2') format('woff2');
+      font-weight: 300 900; font-style: normal; font-display: swap;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100dvh; display: grid; place-items: center;
+      font-family: 'Satoshi', 'Segoe UI', system-ui, sans-serif;
+      background: #060A13; color: #ECF1FA; text-align: center; padding: 24px;
+      background-image:
+        radial-gradient(900px 540px at 70% -10%, rgba(61,120,255,0.13), transparent 62%),
+        linear-gradient(rgba(110,140,200,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(110,140,200,0.05) 1px, transparent 1px);
+      background-size: auto, 44px 44px, 44px 44px;
+    }
+    .frame {
+      position: relative; display: inline-block; padding: 34px 50px;
+      border: 1.6px dashed #19D3E6; border-radius: 4px; margin-bottom: 30px;
+    }
+    .frame i {
+      position: absolute; width: 10px; height: 10px; border-radius: 2.5px;
+      background: #0B1322; border: 1.6px solid #19D3E6;
+    }
+    .frame i:nth-child(1) { left: -5px; top: -5px; } .frame i:nth-child(2) { right: -5px; top: -5px; }
+    .frame i:nth-child(3) { left: -5px; bottom: -5px; } .frame i:nth-child(4) { right: -5px; bottom: -5px; }
+    h1 {
+      font-family: 'Clash Display', 'Segoe UI Semibold', system-ui, sans-serif;
+      font-weight: 600; font-size: clamp(70px, 14vw, 130px); line-height: 1; letter-spacing: -0.02em;
+    }
+    .tag {
+      position: absolute; right: -1px; bottom: -32px;
+      font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+      font-size: 11px; letter-spacing: 0.06em; font-weight: 600;
+      color: #06121C; background: #19D3E6; padding: 4px 9px; border-radius: 6px;
+    }
+    p { font-size: 17px; color: #AEBBD1; max-width: 44ch; margin: 0 auto 30px; }
+    a.btn {
+      display: inline-flex; align-items: center; gap: 9px; min-height: 50px;
+      padding: 13px 26px; border-radius: 12px; background: #2557E8; color: #fff;
+      font-size: 16px; font-weight: 600; text-decoration: none;
+      box-shadow: 0 10px 28px rgba(37,87,232,0.35);
+    }
+    a.btn:focus-visible { outline: 2px solid #19D3E6; outline-offset: 3px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="frame">
+      <i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i>
+      <h1>404</h1>
+      <span class="tag" aria-hidden="true">0 &times; 0</span>
+    </div>
+    <p>Nothing was captured at this address. The page may have moved, or the link may be out of date.</p>
+    <a class="btn" href="/">Back to SuperShot</a>
+  </main>
+</body>
+</html>
